@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — InfratryAI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chat.css">
+  <style>
+    /* ── ADMIN LAYOUT ── */
+    body { overflow: hidden; height: 100vh; }
+
+    .admin-root {
+      display: flex;
+      height: 100vh;
+      padding-top: var(--nav-h);
+    }
+
+    /* SIDEBAR */
+    .adm-sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--s1);
+      border-right: 1px solid var(--b1);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .adm-sidebar::-webkit-scrollbar { width: 3px; }
+    .adm-sidebar::-webkit-scrollbar-thumb { background: var(--s5); }
+
+    .sidebar-section { padding: 20px 14px 8px; }
+    .sidebar-section-label {
+      font-size: 9.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--t4);
+      padding: 0 8px;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      color: var(--t3);
+      text-decoration: none;
+      font-size: 12px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      transition: all 0.18s;
+      font-family: var(--mono);
+    }
+
+    .sidebar-link:hover { color: var(--t1); background: var(--s3); }
+    .sidebar-link.active { color: var(--t1); background: var(--s3); }
+    .sidebar-link.active .sl-icon { opacity: 1; }
+
+    .sl-icon { font-size: 13px; opacity: 0.6; flex-shrink: 0; }
+
+    .sidebar-divider { height: 1px; background: var(--b1); margin: 8px 14px; }
+
+    /* MAIN */
+    .adm-main {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .adm-main::-webkit-scrollbar { width: 3px; }
+    .adm-main::-webkit-scrollbar-thumb { background: var(--s5); }
+
+    /* PANEL */
+    .adm-panel { display: none; padding: 36px 36px; max-width: 900px; }
+    .adm-panel.active { display: block; }
+
+    .adm-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--b1);
+    }
+
+    .adm-panel-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-style: italic;
+    }
+
+    /* Stats grid */
+    .adm-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .adm-stat {
+      background: var(--s2);
+      border: 1px solid var(--b1);
+      border-radius: var(--r-lg);
+      padding: 20px 22px;
+    }
+
+    .adm-stat-val {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-style: italic;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .adm-stat-val.v-blue   { color: var(--blue); }
+    .adm-stat-val.v-purple { color: var(--purple); }
+    .adm-stat-val.v-teal   { color: var(--teal); }
+    .adm-stat-val.v-amber  { color: var(--amber); }
+
+    .adm-stat-label { font-size: 10.5px; color: var(--t3); letter-spacing: 0.04em; }
+
+    /* Cards */
+    .adm-card {
+      background: var(--s2);
+      border: 1px solid var(--b1);
+      border-radius: var(--r-lg);
+      padding: 24px 28px;
+      margin-bottom: 16px;
+    }
+
+    .adm-card h3 {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-style: italic;
+      margin-bottom: 18px;
+      color: var(--t1);
+    }
+
+    /* Model toggle rows */
+    .model-row-adm {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--b1);
+    }
+
+    .model-row-adm:last-child { border-bottom: none; }
+
+    .model-row-left { display: flex; align-items: center; gap: 10px; }
+
+    .model-row-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .model-row-info-name { font-size: 12.5px; color: var(--t1); font-weight: 500; }
+    .model-row-info-alias { font-size: 10.5px; color: var(--t4); margin-top: 2px; }
+
+    /* Toggle switch */
+    .toggle-sw {
+      position: relative;
+      width: 38px; height: 20px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .toggle-sw input { display: none; }
+
+    .toggle-track {
+      position: absolute; inset: 0;
+      background: var(--s4);
+      border: 1px solid var(--b2);
+      border-radius: 20px;
+      transition: all 0.2s;
+    }
+
+    .toggle-sw input:checked + .toggle-track { background: var(--blue); border-color: var(--blue); }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 14px; height: 14px;
+      background: var(--t3);
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .toggle-sw input:checked ~ .toggle-thumb { transform: translateX(18px); background: #fff; }
+
+    /* Pages table */
+    .adm-table { width: 100%; border-collapse: collapse; }
+    .adm-table th { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t4); text-align: left; padding: 8px 0 12px; border-bottom: 1px solid var(--b1); }
+    .adm-table td { padding: 12px 0; border-bottom: 1px solid var(--b1); font-size: 12px; color: var(--t2); vertical-align: middle; }
+    .adm-table td:first-child { color: var(--t1); font-weight: 500; }
+    .adm-table tr:last-child td { border-bottom: none; }
+
+    /* Quick actions */
+    .quick-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* Admin chat embed */
+    .adm-chat-wrap {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - var(--nav-h) - 140px);
+      background: var(--s1);
+      border: 1px solid var(--b1);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+    }
+
+    .adm-chat-model-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: var(--s2);
+      border-bottom: 1px solid var(--b1);
+    }
+
+    .adm-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px;
+    }
+
+    .adm-messages::-webkit-scrollbar { width: 3px; }
+    .adm-messages::-webkit-scrollbar-thumb { background: var(--s5); }
+
+    .adm-input-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 12px 14px;
+      border-top: 1px solid var(--b1);
+      background: var(--s1);
+    }
+
+    .adm-textarea {
+      flex: 1;
+      background: var(--s3);
+      border: 1px solid var(--b2);
+      border-radius: 10px;
+      color: var(--t1);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      padding: 9px 14px;
+      resize: none;
+      min-height: 40px;
+      max-height: 100px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .adm-textarea:focus { border-color: rgba(91,156,246,0.3); }
+    .adm-textarea::placeholder { color: var(--t4); }
+
+    @media (max-width: 900px) {
+      .adm-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 700px) {
+      .adm-sidebar { display: none; }
+      .adm-panel { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-mark">IA</div>
+    <span class="nav-wordmark">Infratry<em>AI</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="czat.html">Czat</a></li>
+    <li><a href="admin.html" class="active">Admin</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="admin-root">
+
+  <!-- SIDEBAR -->
+  <aside class="adm-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Główne</div>
+      <button class="sidebar-link active" data-panel="dashboard">
+        <span class="sl-icon">◈</span> Dashboard
+      </button>
+      <button class="sidebar-link" data-panel="chat">
+        <span class="sl-icon">◇</span> Czat testowy
+      </button>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Konfiguracja</div>
+      <button class="sidebar-link" data-panel="models">
+        <span class="sl-icon">◈</span> Modele AI
+      </button>
+      <button class="sidebar-link" data-panel="pages">
+        <span class="sl-icon">◇</span> Strony
+      </button>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Dane</div>
+      <button class="sidebar-link" data-panel="stats">
+        <span class="sl-icon">◈</span> Statystyki
+      </button>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <a href="index.html" class="sidebar-link">
+        <span class="sl-icon">←</span> Strona główna
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="adm-main">
+
+    <!-- DASHBOARD -->
+    <div class="adm-panel active" id="panel-dashboard">
+      <div class="adm-panel-header">
+        <div class="adm-panel-title">Dashboard</div>
+        <div class="nav-status" id="adm-status">
+          <span class="nav-status-dot" id="adm-status-dot"></span>
+          <span id="adm-status-text">Sprawdzam…</span>
+        </div>
+      </div>
+
+      <div class="adm-stats">
+        <div class="adm-stat">
+          <div class="adm-stat-val v-blue">—</div>
+          <div class="adm-stat-label">Wiadomości dziś</div>
+        </div>
+        <div class="adm-stat">
+          <div class="adm-stat-val v-purple">3</div>
+          <div class="adm-stat-label">Aktywne modele</div>
+        </div>
+        <div class="adm-stat">
+          <div class="adm-stat-val v-teal">—</div>
+          <div class="adm-stat-label">Sesje dziś</div>
+        </div>
+        <div class="adm-stat">
+          <div class="adm-stat-val v-amber">0</div>
+          <div class="adm-stat-label">Błędy (24h)</div>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <h3>Szybkie akcje</h3>
+        <div class="quick-actions">
+          <button class="btn btn-primary" onclick="showPanel('chat')">◇ Otwórz czat testowy</button>
+          <button class="btn btn-outline" onclick="showPanel('models')">⚙ Konfiguruj modele</button>
+          <a href="czat.html" class="btn btn-ghost">→ Przejdź do czatu</a>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <h3>Status backendu</h3>
+        <div id="backend-info" style="font-size:12px;color:var(--t2);line-height:1.7">
+          Sprawdzam połączenie z proxy…
+        </div>
+      </div>
+    </div>
+
+    <!-- MODELS -->
+    <div class="adm-panel" id="panel-models">
+      <div class="adm-panel-header">
+        <div class="adm-panel-title">Zarządzanie modelami</div>
+      </div>
+
+      <div class="adm-card">
+        <h3>Aktywne modele</h3>
+        <div class="model-row-adm">
+          <div class="model-row-left">
+            <div class="model-row-dot" style="background:var(--blue)"></div>
+            <div>
+              <div class="model-row-info-name">Tytanium 3.7</div>
+              <div class="model-row-info-alias">→ deepseek-r1:671b · 128k ctx</div>
+            </div>
+          </div>
+          <label class="toggle-sw">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="model-row-adm">
+          <div class="model-row-left">
+            <div class="model-row-dot" style="background:var(--purple)"></div>
+            <div>
+              <div class="model-row-info-name">Thinking 2.4</div>
+              <div class="model-row-info-alias">→ minimax-text-01 · 64k ctx</div>
+            </div>
+          </div>
+          <label class="toggle-sw">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="model-row-adm">
+          <div class="model-row-left">
+            <div class="model-row-dot" style="background:var(--teal)"></div>
+            <div>
+              <div class="model-row-info-name">Quantum 1.9</div>
+              <div class="model-row-info-alias">→ qwen2.5:72b · 32k ctx</div>
+            </div>
+          </div>
+          <label class="toggle-sw">
+            <input type="checkbox" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+      </div>
+
+      <div class="adm-card">
+        <h3>Endpoint proxy</h3>
+        <div style="font-size:12px;color:var(--t2);line-height:1.9">
+          <div>POST <code style="background:var(--s3);padding:2px 6px;border-radius:4px;font-size:11px">/api/chat</code> — wysyła zapytanie do modelu</div>
+          <div>GET &nbsp;<code style="background:var(--s3);padding:2px 6px;border-radius:4px;font-size:11px">/api/status</code> — healthcheck Ollama</div>
+          <div style="margin-top:10px;color:var(--t3)">Ollama URL: <code style="font-size:11px">http://localhost:11434</code> (ustaw przez zmienną OLLAMA_URL)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGES -->
+    <div class="adm-panel" id="panel-pages">
+      <div class="adm-panel-header">
+        <div class="adm-panel-title">Strony</div>
+      </div>
+      <div class="adm-card">
+        <h3>Pliki HTML</h3>
+        <table class="adm-table">
+          <thead>
+            <tr>
+              <th>Plik</th>
+              <th>Opis</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>index.html</td>
+              <td>Strona główna</td>
+              <td style="color:var(--teal)">Publiczna</td>
+              <td><a href="index.html" class="btn btn-ghost" style="padding:4px 10px;font-size:10.5px">Podgląd</a></td>
+            </tr>
+            <tr>
+              <td>czat.html</td>
+              <td>Interfejs czatu AI</td>
+              <td style="color:var(--teal)">Publiczna</td>
+              <td><a href="czat.html" class="btn btn-ghost" style="padding:4px 10px;font-size:10.5px">Podgląd</a></td>
+            </tr>
+            <tr>
+              <td>try-free.html</td>
+              <td>Demo / Try Free</td>
+              <td style="color:var(--teal)">Publiczna</td>
+              <td><a href="try-free.html" class="btn btn-ghost" style="padding:4px 10px;font-size:10.5px">Podgląd</a></td>
+            </tr>
+            <tr>
+              <td>admin.html</td>
+              <td>Panel admina</td>
+              <td style="color:var(--amber)">Prywatna</td>
+              <td><span style="font-size:11px;color:var(--t4)">Tu jesteś</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="adm-panel" id="panel-stats">
+      <div class="adm-panel-header">
+        <div class="adm-panel-title">Statystyki</div>
+      </div>
+      <div class="adm-card">
+        <h3>Dane użycia</h3>
+        <p style="font-size:12px;color:var(--t2);line-height:1.75">
+          Statystyki będą dostępne po podłączeniu bazy danych lub systemu logowania po stronie backendu proxy.
+          Endpoint <code style="background:var(--s3);padding:2px 6px;border-radius:4px;font-size:11px">/api/status</code> zwraca
+          podstawowe informacje o stanie modeli Ollama.
+        </p>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="adm-panel" id="panel-chat">
+      <div class="adm-panel-header">
+        <div class="adm-panel-title">Czat testowy</div>
+        <span style="font-size:11px;color:var(--t4)">Pełny dostęp · bez limitu wiadomości</span>
+      </div>
+
+      <div class="adm-chat-wrap">
+        <!-- model bar -->
+        <div class="adm-chat-model-bar">
+          <button class="model-tab active blue" data-model="tytanium-3.7" data-color="blue" style="font-size:11px;padding:5px 12px">
+            <span class="model-indicator ind-blue"></span>Tytanium 3.7
+          </button>
+          <button class="model-tab" data-model="thinking-2.4" data-color="purple" style="font-size:11px;padding:5px 12px">
+            <span class="model-indicator ind-purple"></span>Thinking 2.4
+          </button>
+          <button class="model-tab" data-model="quantum-1.9" data-color="teal" style="font-size:11px;padding:5px 12px">
+            <span class="model-indicator ind-teal"></span>Quantum 1.9
+          </button>
+        </div>
+
+        <!-- messages -->
+        <div class="adm-messages" id="messages-area">
+          <div class="messages-feed" id="messages-feed" style="padding:16px 4px">
+            <div class="empty-state" id="empty-state" style="min-height:200px">
+              <div class="empty-glyph" style="font-size:32px">✦</div>
+              <h1 class="empty-headline" style="font-size:18px">Czat testowy admina</h1>
+              <p class="empty-sub" style="font-size:11px">Bez ograniczeń. Pełny dostęp do wszystkich modeli.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- input -->
+        <div class="adm-input-row">
+          <textarea
+            class="adm-textarea"
+            id="msg-textarea"
+            placeholder="Napisz wiadomość… (Enter = wyślij)"
+            rows="1"
+          ></textarea>
+          <button class="send-button" id="send-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/chat.js"></script>
+<script>
+// Panel switching
+function showPanel(id) {
+  document.querySelectorAll('.adm-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('panel-' + id)?.classList.add('active');
+  document.querySelector(`[data-panel="${id}"]`)?.classList.add('active');
+}
+
+document.querySelectorAll('.sidebar-link[data-panel]').forEach(btn => {
+  btn.addEventListener('click', () => showPanel(btn.dataset.panel));
+});
+
+// Admin status check
+async function adminStatus() {
+  try {
+    const r = await fetch('/api/status', { signal: AbortSignal.timeout(4000) });
+    const dot  = document.getElementById('adm-status-dot');
+    const text = document.getElementById('adm-status-text');
+    const info = document.getElementById('backend-info');
+    if (r.ok) {
+      dot.className  = 'nav-status-dot';
+      text.textContent = 'Online';
+      info.innerHTML = '✦ Proxy działa poprawnie<br>✦ Ollama odpowiada na zapytania<br><span style="color:var(--t4);font-size:11px;margin-top:6px;display:block">Ostatnie sprawdzenie: ' + new Date().toLocaleTimeString('pl-PL') + '</span>';
+    } else {
+      dot.className  = 'nav-status-dot offline';
+      text.textContent = 'Offline';
+      info.innerHTML = '⚠ Proxy nie odpowiada. Sprawdź czy <code>node api/server.js</code> jest uruchomione.';
+    }
+  } catch {
+    document.getElementById('adm-status-dot').className = 'nav-status-dot offline';
+    document.getElementById('adm-status-text').textContent = 'Offline';
+    document.getElementById('backend-info').innerHTML = '⚠ Brak połączenia z backendem.';
+  }
+}
+
+adminStatus();
+setInterval(adminStatus, 30000);
+</script>
+</body>
+</html>

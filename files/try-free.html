@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Try Free — InfratryAI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .tf-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: calc(var(--nav-h) + 40px) 28px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tf-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      max-width: 860px;
+      width: 100%;
+      background: var(--b1);
+      border: 1px solid var(--b1);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.4), var(--glow-blue);
+    }
+
+    .tf-left {
+      background: var(--s1);
+      padding: 52px 44px;
+    }
+
+    .tf-right {
+      background: var(--s2);
+      padding: 52px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .tf-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border: 1px solid rgba(91,156,246,0.2);
+      border-radius: 100px;
+      font-size: 10.5px;
+      color: var(--blue);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .tf-h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-style: italic;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .tf-h1 em { font-style: normal; color: var(--blue); }
+
+    .tf-desc {
+      font-size: 12.5px;
+      color: var(--t2);
+      line-height: 1.75;
+      margin-bottom: 36px;
+    }
+
+    .tf-actions { display: flex; flex-direction: column; gap: 10px; }
+    .tf-actions .btn { justify-content: center; }
+
+    /* ── Right: plan compare ── */
+    .plan-label {
+      font-size: 9.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--t4);
+      margin-bottom: 20px;
+    }
+
+    .plan-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--b1);
+      font-size: 12px;
+    }
+
+    .plan-row:last-of-type { border-bottom: none; }
+
+    .plan-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+    .plan-text { color: var(--t2); line-height: 1.5; }
+    .plan-text strong { color: var(--t1); font-weight: 500; display: block; margin-bottom: 1px; }
+
+    .plan-row.limit .plan-text { color: var(--t3); }
+    .plan-row.limit .plan-text strong { color: var(--t3); }
+
+    .tf-note {
+      margin-top: 28px;
+      padding: 14px 16px;
+      background: var(--s3);
+      border: 1px solid var(--b1);
+      border-radius: var(--r);
+      font-size: 11px;
+      color: var(--t3);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .tf-wrap { grid-template-columns: 1fr; }
+      .tf-left, .tf-right { padding: 36px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-mark">IA</div>
+    <span class="nav-wordmark">Infratry<em>AI</em></span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="czat.html">Czat</a></li>
+    <li><a href="try-free.html" class="nav-cta active">Try Free</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- Orbs -->
+<div class="hero-orb orb-1" style="opacity:.06"></div>
+<div class="hero-orb orb-2" style="opacity:.05"></div>
+
+<div class="tf-page">
+  <div class="tf-wrap">
+
+    <!-- LEFT -->
+    <div class="tf-left">
+      <div class="tf-badge">
+        <span class="pill-dot"></span>Demo · Bez logowania
+      </div>
+      <h1 class="tf-h1">Zacznij<br>rozmawiać<br>z <em>AI</em> teraz</h1>
+      <p class="tf-desc">
+        Przetestuj InfratryAI bez zakładania konta.
+        Demo daje Ci dostęp do modelu Tytanium 3.7
+        i do 10 wiadomości na sesję.
+      </p>
+      <div class="tf-actions">
+        <a href="czat.html" class="btn btn-primary">✦ Rozpocznij demo</a>
+        <a href="index.html" class="btn btn-ghost">← Wróć do strony głównej</a>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="tf-right">
+      <div>
+        <div class="plan-label">Co obejmuje tryb darmowy</div>
+
+        <div class="plan-row">
+          <span class="plan-icon">✦</span>
+          <div class="plan-text">
+            <strong>Tytanium 3.7 (DeepSeek 671B)</strong>
+            Dostęp do najmocniejszego modelu w wersji demo
+          </div>
+        </div>
+        <div class="plan-row">
+          <span class="plan-icon">✦</span>
+          <div class="plan-text">
+            <strong>Streaming odpowiedzi</strong>
+            Tokeny pojawiają się na bieżąco, bez czekania
+          </div>
+        </div>
+        <div class="plan-row">
+          <span class="plan-icon">✦</span>
+          <div class="plan-text">
+            <strong>Wieloturnowe rozmowy</strong>
+            Model pamięta kontekst przez całą sesję
+          </div>
+        </div>
+        <div class="plan-row">
+          <span class="plan-icon">✦</span>
+          <div class="plan-text">
+            <strong>Markdown i bloki kodu</strong>
+            Formatowane odpowiedzi z podświetlaniem składni
+          </div>
+        </div>
+        <div class="plan-row limit">
+          <span class="plan-icon" style="opacity:.4">◌</span>
+          <div class="plan-text">
+            <strong>Limit 10 wiadomości / sesja</strong>
+            Historia nie jest zapisywana po odświeżeniu
+          </div>
+        </div>
+        <div class="plan-row limit">
+          <span class="plan-icon" style="opacity:.4">◌</span>
+          <div class="plan-text">
+            <strong>Brak modeli Thinking i Quantum</strong>
+            Dostępne po pełnej konfiguracji backendu
+          </div>
+        </div>
+      </div>
+
+      <div class="tf-note">
+        ⓘ Tryb demo wymaga działającego serwera proxy z Ollama. Jeśli backend jest offline, odpowiedzi nie będą generowane.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InfratryAI — Rozmawiaj z najlepszymi modelami AI</title>
+  <meta name="description" content="Interaktywny czat AI z modelami DeepSeek 600B, MiniMax i Qwen. Lokalnie, bezpiecznie, błyskawicznie.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-mark">IA</div>
+    <span class="nav-wordmark">Infratry<em>AI</em></span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="czat.html">Czat</a></li>
+    <li><a href="try-free.html" class="nav-cta">Try Free</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+  <div class="hero-orb orb-3"></div>
+
+  <div class="hero-inner">
+    <div class="hero-pill">
+      <span class="pill-dot"></span>
+      Nowa generacja lokalnego AI
+    </div>
+
+    <h1 class="hero-h1">
+      Rozmawiaj<br>
+      z <em>najlepszymi</em><br>
+      <span class="dim">modelami AI.</span>
+    </h1>
+
+    <p class="hero-desc">
+      Interaktywny czat z DeepSeek 600B, MiniMax i Qwen —
+      uruchamiany lokalnie przez proxy, bez wycieku danych,
+      z pełną historią rozmowy i streamingiem odpowiedzi.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="try-free.html" class="btn btn-primary">✦ Wypróbuj za darmo</a>
+      <a href="czat.html"     class="btn btn-outline">Otwórz czat →</a>
+    </div>
+
+    <div class="model-chips">
+      <div class="mchip"><span class="mchip-dot blue"></span>Tytanium 3.7 · 671B</div>
+      <div class="mchip"><span class="mchip-dot purple"></span>Thinking 2.4 · MiniMax</div>
+      <div class="mchip"><span class="mchip-dot teal"></span>Quantum 1.9 · Qwen 72B</div>
+    </div>
+  </div>
+
+  <!-- Floating chat mockup -->
+  <div class="hero-visual">
+    <div class="mockup-window">
+      <div class="mockup-bar">
+        <div class="mockup-dot r"></div>
+        <div class="mockup-dot y"></div>
+        <div class="mockup-dot g"></div>
+        <span class="mockup-title">InfratryAI · Tytanium 3.7</span>
+      </div>
+      <div class="mockup-body">
+        <div class="mock-msg user" style="animation-delay:.1s">
+          <div class="mock-avatar usr">Ty</div>
+          <div class="mock-bubble">Napisz mi funkcję binarnego wyszukiwania w Pythonie</div>
+        </div>
+        <div class="mock-msg ai" style="animation-delay:.3s">
+          <div class="mock-avatar ai">AI</div>
+          <div class="mock-bubble">
+            Oczywiście! Oto wydajna implementacja:<br><br>
+            <code style="font-family:inherit;background:rgba(91,156,246,0.1);padding:1px 4px;border-radius:3px;font-size:10px">def binary_search(arr, target):</code><br>
+            &nbsp;&nbsp;<code style="font-family:inherit;background:rgba(91,156,246,0.1);padding:1px 4px;border-radius:3px;font-size:10px">lo, hi = 0, len(arr)-1</code><span class="mock-cursor"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="section-inner">
+    <div class="eyebrow reveal">Możliwości</div>
+    <h2 class="section-h2 reveal" style="transition-delay:.05s">Wszystko, czego<br>potrzebujesz do <em>pracy z AI</em></h2>
+    <p class="section-p reveal" style="transition-delay:.1s">Zaprojektowane z myślą o deweloperach i użytkownikach, którzy cenią prywatność, szybkość i estetykę.</p>
+
+    <div class="feat-grid">
+      <div class="feat-cell reveal" style="transition-delay:.1s">
+        <div class="feat-icon ib">🤖</div>
+        <div class="feat-h">Trzy modele AI</div>
+        <p class="feat-p">DeepSeek 671B, MiniMax i Qwen 72B w jednym interfejsie. Przełączaj modele jednym kliknięciem bez utraty kontekstu.</p>
+      </div>
+      <div class="feat-cell reveal" style="transition-delay:.15s">
+        <div class="feat-icon ip">⚡</div>
+        <div class="feat-h">Streaming odpowiedzi</div>
+        <p class="feat-p">Tokeny pojawiają się na bieżąco, tak jak w ChatGPT. Możesz przerwać generowanie w dowolnej chwili.</p>
+      </div>
+      <div class="feat-cell reveal" style="transition-delay:.2s">
+        <div class="feat-icon it">💬</div>
+        <div class="feat-h">Pełna historia rozmowy</div>
+        <p class="feat-p">Wieloturnowe konwersacje z zachowaniem kontekstu. Model pamięta wszystko co powiedziałeś w tej sesji.</p>
+      </div>
+      <div class="feat-cell reveal" style="transition-delay:.25s">
+        <div class="feat-icon ia">🔒</div>
+        <div class="feat-h">Bezpieczne proxy</div>
+        <p class="feat-p">Frontend nie przechowuje żadnych kluczy. Backend proxy chowa adresy Ollama przed światem zewnętrznym.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section" style="padding-top:0">
+  <div class="section-inner">
+    <div class="stats-row reveal">
+      <div class="stat-cell">
+        <div class="stat-n">3</div>
+        <div class="stat-l">Modele AI<br>do wyboru</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n"><em>671</em>B</div>
+        <div class="stat-l">Parametrów<br>Tytanium 3.7</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n">128K</div>
+        <div class="stat-l">Okno kontekstu<br>modelu flagowego</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n">∞</div>
+        <div class="stat-l">Wiadomości<br>w trybie pełnym</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELS -->
+<section class="section">
+  <div class="section-inner">
+    <div class="eyebrow reveal">Modele</div>
+    <h2 class="section-h2 reveal" style="transition-delay:.05s">Trzy silniki,<br>jeden <em>interfejs</em></h2>
+    <p class="section-p reveal" style="transition-delay:.1s">Każdy model ma inne mocne strony. Wybierz właściwy do zadania — albo eksperymentuj.</p>
+
+    <div class="models-strip">
+      <a href="czat.html?model=tytanium-3.7" class="model-tile t-blue reveal" style="transition-delay:.1s">
+        <div class="tile-eyebrow blue"><span class="tile-dot"></span>Flagship · DeepSeek R1</div>
+        <div class="tile-name">Tytanium 3.7</div>
+        <div class="tile-alias">deepseek-r1:671b · 128k kontekst</div>
+        <p class="tile-desc">Najbardziej zaawansowany model. Niezrównany w analizie kodu, długich dokumentach i złożonym rozumowaniu wieloetapowym.</p>
+        <div class="tile-specs">
+          <div><span class="tile-spec-label">Parametry</span><span class="tile-spec-val">671B</span></div>
+          <div><span class="tile-spec-label">Kontekst</span><span class="tile-spec-val">128K</span></div>
+          <div><span class="tile-spec-label">Tryb</span><span class="tile-spec-val">Reasoning</span></div>
+        </div>
+      </a>
+
+      <a href="czat.html?model=thinking-2.4" class="model-tile t-purple reveal" style="transition-delay:.15s">
+        <div class="tile-eyebrow purple"><span class="tile-dot"></span>Reasoning · MiniMax</div>
+        <div class="tile-name">Thinking 2.4</div>
+        <div class="tile-alias">minimax-text-01 · 64k kontekst</div>
+        <p class="tile-desc">Specjalizuje się w rozumowaniu krok po kroku (CoT). Idealny do matematyki, logiki i zadań wymagających głębokiej refleksji.</p>
+        <div class="tile-specs">
+          <div><span class="tile-spec-label">Tryb</span><span class="tile-spec-val">CoT</span></div>
+          <div><span class="tile-spec-label">Kontekst</span><span class="tile-spec-val">64K</span></div>
+          <div><span class="tile-spec-label">Zastos.</span><span class="tile-spec-val">Logika</span></div>
+        </div>
+      </a>
+
+      <a href="czat.html?model=quantum-1.9" class="model-tile t-teal reveal" style="transition-delay:.2s">
+        <div class="tile-eyebrow teal"><span class="tile-dot"></span>Multilingual · Qwen</div>
+        <div class="tile-name">Quantum 1.9</div>
+        <div class="tile-alias">qwen2.5:72b · 32k kontekst</div>
+        <p class="tile-desc">Wszechstronny model wielojęzyczny. Świetny do tłumaczeń, codziennych rozmów i szybkich odpowiedzi w 100+ językach.</p>
+        <div class="tile-specs">
+          <div><span class="tile-spec-label">Parametry</span><span class="tile-spec-val">72B</span></div>
+          <div><span class="tile-spec-label">Języki</span><span class="tile-spec-val">100+</span></div>
+          <div><span class="tile-spec-label">Zastos.</span><span class="tile-spec-val">Ogólny</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band">
+  <div class="cta-band-inner">
+    <h2 class="cta-h">Gotowy, by zacząć<br>rozmawiać z <em>AI</em>?</h2>
+    <p class="cta-p">Uruchom InfratryAI lokalnie w kilka minut. Bez chmury, bez abonamentu, bez limitów.</p>
+    <div class="cta-btns">
+      <a href="try-free.html" class="btn btn-primary">✦ Wypróbuj za darmo</a>
+      <a href="czat.html"     class="btn btn-outline">Otwórz czat →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Infratry<em>AI</em></div>
+  <ul class="footer-nav">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="czat.html">Czat</a></li>
+    <li><a href="try-free.html">Try Free</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 InfratryAI · Wszystkie prawa zastrzeżone</div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InfratryAI — Czat</title>
+  <link rel="stylesheet" href="css/chat.css">
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav class="chat-nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo-mark">IA</a>
+    <span class="nav-wordmark">Infratry<em>AI</em></span>
+    <div class="nav-divider"></div>
+    <div class="nav-model-pill" id="nav-model-pill">
+      <span class="nav-model-dot" id="nav-model-dot"></span>
+      <span id="nav-model-name">Tytanium 3.7</span>
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-status" id="nav-status">
+      <span class="nav-status-dot" id="nav-status-dot"></span>
+      <span id="nav-status-text">Online</span>
+    </div>
+    <a href="index.html" class="nav-btn" title="Strona główna">⌂</a>
+    <button class="nav-btn" onclick="clearChat()" title="Nowy czat">+</button>
+  </div>
+</nav>
+
+<!-- ══ MODEL PANEL ══ -->
+<div class="model-panel">
+  <button class="model-tab active blue" data-model="tytanium-3.7" data-color="blue">
+    <span class="model-indicator ind-blue"></span>
+    Tytanium 3.7
+  </button>
+  <button class="model-tab" data-model="thinking-2.4" data-color="purple">
+    <span class="model-indicator ind-purple"></span>
+    Thinking 2.4
+  </button>
+  <button class="model-tab" data-model="quantum-1.9" data-color="teal">
+    <span class="model-indicator ind-teal"></span>
+    Quantum 1.9
+  </button>
+  <div class="model-panel-spacer"></div>
+  <span class="model-context-badge" id="msg-count">Nowa rozmowa</span>
+</div>
+
+<!-- ══ MESSAGES ══ -->
+<div class="messages-area" id="messages-area">
+  <div class="messages-feed" id="messages-feed">
+
+    <!-- Empty state -->
+    <div class="empty-state" id="empty-state">
+      <div class="empty-glyph">✦</div>
+      <h1 class="empty-headline">Jak mogę pomóc?</h1>
+      <p class="empty-sub">Wybierz model powyżej i zacznij pisać. Obsługuję kod, analizę, pisanie i wiele więcej.</p>
+      <div class="starter-grid">
+        <div class="starter-card" data-prompt="Napisz wydajną funkcję sortowania w Pythonie z komentarzami">
+          <span class="starter-card-icon">💻</span>
+          <span class="starter-card-text">Napisz funkcję sortowania w Pythonie</span>
+        </div>
+        <div class="starter-card" data-prompt="Wyjaśnij czym jest rekurencja, podaj przykłady">
+          <span class="starter-card-icon">🧠</span>
+          <span class="starter-card-text">Wyjaśnij czym jest rekurencja</span>
+        </div>
+        <div class="starter-card" data-prompt="Zaproponuj strukturę projektu REST API w Node.js">
+          <span class="starter-card-icon">🏗️</span>
+          <span class="starter-card-text">Struktura projektu REST API</span>
+        </div>
+        <div class="starter-card" data-prompt="Pomóż mi napisać profesjonalnego maila do klienta">
+          <span class="starter-card-icon">✉️</span>
+          <span class="starter-card-text">Napisz profesjonalnego maila</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Scroll to bottom -->
+<button class="scroll-btn" id="scroll-btn" onclick="scrollToBottom(true)">
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  Najnowsze
+</button>
+
+<!-- ══ INPUT ══ -->
+<div class="input-zone">
+  <div class="input-shell">
+    <textarea
+      class="msg-textarea"
+      id="msg-textarea"
+      placeholder="Napisz wiadomość…"
+      rows="1"
+      autofocus
+    ></textarea>
+    <div class="input-actions">
+      <button class="send-button" id="send-btn" title="Wyślij">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="js/chat.js"></script>
+</body>
+</html>
