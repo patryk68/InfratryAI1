@@ -1,129 +1,117 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Try Free — InfratryAI</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    .tf-page {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: calc(var(--nav-h) + 40px) 28px 60px;
-      position: relative;
-      z-index: 1;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Try Free — InfratryAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--s0:#06080c;--s1:#090c12;--s2:#0d1119;--s3:#121820;--s4:#181f2d;--s5:#1e2739;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.15);--t1:#edf1f9;--t2:#8b97ac;--t3:#4d5a6e;--t4:#2e3a4c;--blue:#5b9cf6;--purple:#a78bfa;--teal:#34d399;--amber:#fbbf24;--serif:'Instrument Serif',Georgia,serif;--mono:'Geist Mono','SF Mono',Menlo,monospace;--nav-h:60px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--mono);background:var(--s0);color:var(--t1);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(91,156,246,.05) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 100%,rgba(167,139,250,.04) 0%,transparent 50%);pointer-events:none;z-index:0}
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:900;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(6,8,12,.92);backdrop-filter:blur(28px);border-bottom:1px solid var(--b1)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-mark{width:28px;height:28px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff}
+.nav-wordmark{font-family:var(--serif);font-size:17px;color:var(--t1)}
+.nav-wordmark em{font-style:italic;color:var(--blue)}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none}
+.nav-links a{display:block;padding:6px 12px;color:var(--t3);text-decoration:none;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;border-radius:8px;transition:all .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--t1);background:var(--s4)}
+.nav-cta{background:var(--blue)!important;color:#fff!important;font-weight:500!important;padding:6px 16px!important}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px}
+.hamburger span{display:block;width:20px;height:1.5px;background:var(--t2);border-radius:2px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:10px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.03em;text-decoration:none;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
+.btn-p{background:var(--blue);color:#fff;box-shadow:0 0 24px rgba(91,156,246,.22)}
+.btn-p:hover{background:#4a8fe8;transform:translateY(-1px)}
+.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b2)}
+.btn-o:hover{background:var(--s3);border-color:var(--b3);color:var(--t1)}
 
-    .tf-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-      max-width: 860px;
-      width: 100%;
-      background: var(--b1);
-      border: 1px solid var(--b1);
-      border-radius: var(--r-xl);
-      overflow: hidden;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.4), var(--glow-blue);
-    }
+/* PAGE */
+.page{position:relative;z-index:1;padding:calc(var(--nav-h) + 60px) 28px 80px;display:flex;flex-direction:column;align-items:center;gap:48px}
 
-    .tf-left {
-      background: var(--s1);
-      padding: 52px 44px;
-    }
+/* HERO */
+.tf-hero{text-align:center;max-width:600px}
+.tf-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border:1px solid rgba(91,156,246,.2);border-radius:100px;font-size:10.5px;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:24px}
+.pill-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.tf-h1{font-family:var(--serif);font-size:clamp(2rem,5vw,3.4rem);font-style:italic;line-height:1.1;letter-spacing:-.02em;margin-bottom:16px}
+.tf-h1 em{font-style:normal;color:var(--blue)}
+.tf-desc{font-size:13px;color:var(--t2);line-height:1.75;max-width:460px;margin:0 auto 28px}
 
-    .tf-right {
-      background: var(--s2);
-      padding: 52px 44px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+/* MODEL PICKER */
+.model-picker{width:100%;max-width:640px}
+.mp-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:12px;text-align:center}
+.mp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.mp-card{background:var(--s2);border:2px solid var(--b1);border-radius:12px;padding:18px 16px;cursor:pointer;transition:all .25s;text-align:center;position:relative;overflow:hidden}
+.mp-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s;border-radius:inherit}
+.mp-card.sel-blue::before{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(91,156,246,.1),transparent)}
+.mp-card.sel-purple::before{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(167,139,250,.1),transparent)}
+.mp-card.sel-teal::before{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(52,211,153,.08),transparent)}
+.mp-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.3)}
+.mp-card.selected{border-color:rgba(91,156,246,.4)}
+.mp-card.selected.sel-blue{border-color:rgba(91,156,246,.4)}
+.mp-card.selected.sel-purple{border-color:rgba(167,139,250,.4)}
+.mp-card.selected.sel-teal{border-color:rgba(52,211,153,.35)}
+.mp-card.selected::before{opacity:1}
+.mp-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 10px;position:relative}
+.mp-dot::after{content:'';position:absolute;inset:-3px;border-radius:50%;opacity:0;transition:opacity .25s}
+.mp-card.selected .mp-dot::after{opacity:1;background:radial-gradient(circle,currentColor,transparent 70%)}
+.mp-name{font-family:var(--serif);font-size:15px;font-style:italic;margin-bottom:4px;color:var(--t1);position:relative}
+.mp-alias{font-size:10px;color:var(--t4);position:relative;margin-bottom:8px}
+.mp-tags{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;position:relative}
+.mp-tag{font-size:9.5px;padding:2px 7px;border-radius:8px;letter-spacing:.04em}
+.mp-tag.tb{background:rgba(91,156,246,.1);color:var(--blue)}
+.mp-tag.tp{background:rgba(167,139,250,.1);color:var(--purple)}
+.mp-tag.tt{background:rgba(52,211,153,.1);color:var(--teal)}
+.mp-check{position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;opacity:0;transition:opacity .2s}
+.mp-card.selected .mp-check{opacity:1}
 
-    .tf-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      border: 1px solid rgba(91,156,246,0.2);
-      border-radius: 100px;
-      font-size: 10.5px;
-      color: var(--blue);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
+/* DEMO COUNTER */
+.demo-counter{width:100%;max-width:640px;background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:20px 24px}
+.dc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dc-title{font-size:12px;color:var(--t2)}
+.dc-num{font-family:var(--serif);font-size:22px;font-style:italic;color:var(--t1)}<span id="dc-used">0</span>/10
+.dc-bar{height:4px;background:var(--s4);border-radius:4px;overflow:hidden}
+.dc-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:4px;width:0%;transition:width .5s ease}
+.dc-hint{font-size:11px;color:var(--t4);margin-top:10px}
 
-    .tf-h1 {
-      font-family: var(--serif);
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-style: italic;
-      line-height: 1.12;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
+/* FEATURES LIST */
+.feat-list{width:100%;max-width:640px;background:var(--s2);border:1px solid var(--b1);border-radius:14px;overflow:hidden}
+.feat-row{display:flex;align-items:flex-start;gap:12px;padding:14px 20px;border-bottom:1px solid var(--b1);transition:background .2s}
+.feat-row:last-child{border-bottom:none}
+.feat-row:hover{background:var(--s3)}
+.feat-row.limited{opacity:.5}
+.feat-ic{font-size:14px;flex-shrink:0;margin-top:1px}
+.feat-text strong{font-size:12.5px;color:var(--t1);font-weight:500;display:block;margin-bottom:2px}
+.feat-text span{font-size:11px;color:var(--t3)}
+.feat-badge{margin-left:auto;flex-shrink:0;font-size:9.5px;padding:2px 8px;border-radius:8px;letter-spacing:.04em}
+.feat-badge.ok{background:rgba(52,211,153,.1);color:var(--teal)}
+.feat-badge.lim{background:rgba(251,191,36,.1);color:var(--amber)}
+.feat-badge.no{background:rgba(255,255,255,.04);color:var(--t4)}
 
-    .tf-h1 em { font-style: normal; color: var(--blue); }
+/* NOTE */
+.tf-note{width:100%;max-width:640px;padding:14px 18px;background:var(--s3);border:1px solid var(--b1);border-radius:12px;font-size:11.5px;color:var(--t3);line-height:1.65;display:flex;gap:10px}
+.tf-note-icon{flex-shrink:0;opacity:.6}
 
-    .tf-desc {
-      font-size: 12.5px;
-      color: var(--t2);
-      line-height: 1.75;
-      margin-bottom: 36px;
-    }
+/* CTA */
+.tf-cta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 
-    .tf-actions { display: flex; flex-direction: column; gap: 10px; }
-    .tf-actions .btn { justify-content: center; }
-
-    /* ── Right: plan compare ── */
-    .plan-label {
-      font-size: 9.5px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--t4);
-      margin-bottom: 20px;
-    }
-
-    .plan-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--b1);
-      font-size: 12px;
-    }
-
-    .plan-row:last-of-type { border-bottom: none; }
-
-    .plan-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-
-    .plan-text { color: var(--t2); line-height: 1.5; }
-    .plan-text strong { color: var(--t1); font-weight: 500; display: block; margin-bottom: 1px; }
-
-    .plan-row.limit .plan-text { color: var(--t3); }
-    .plan-row.limit .plan-text strong { color: var(--t3); }
-
-    .tf-note {
-      margin-top: 28px;
-      padding: 14px 16px;
-      background: var(--s3);
-      border: 1px solid var(--b1);
-      border-radius: var(--r);
-      font-size: 11px;
-      color: var(--t3);
-      line-height: 1.6;
-    }
-
-    @media (max-width: 640px) {
-      .tf-wrap { grid-template-columns: 1fr; }
-      .tf-left, .tf-right { padding: 36px 28px; }
-    }
-  </style>
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--b1);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.f-brand{font-family:var(--serif);font-size:15px;font-style:italic;color:var(--t3)}
+.f-brand em{color:var(--blue);font-style:normal}
+.f-nav{display:flex;gap:4px;list-style:none}
+.f-nav a{padding:4px 10px;font-size:11px;color:var(--t4);text-decoration:none;border-radius:6px;transition:color .2s}
+.f-nav a:hover{color:var(--t2)}
+.f-copy{font-size:10.5px;color:var(--t4)}
+@media(max-width:640px){.mp-grid{grid-template-columns:1fr}.tf-cta{flex-direction:column;align-items:center}.btn{width:100%;justify-content:center}}
+@media(max-width:720px){.hamburger{display:flex}.nav-links{position:fixed;top:var(--nav-h);left:0;right:0;background:rgba(9,12,18,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);flex-direction:column;padding:12px;gap:2px;display:none;z-index:800}.nav-links.open{display:flex}.nav-links a{width:100%;padding:10px 14px}}
+</style>
 </head>
 <body>
-
 <nav class="nav">
   <a href="index.html" class="nav-brand">
     <div class="nav-mark">IA</div>
@@ -132,92 +120,140 @@
   <ul class="nav-links" id="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="czat.html">Czat</a></li>
-    <li><a href="try-free.html" class="nav-cta active">Try Free</a></li>
+    <li><a href="try-free.html" class="active">Try Free</a></li>
   </ul>
   <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
 </nav>
 
-<!-- Orbs -->
-<div class="hero-orb orb-1" style="opacity:.06"></div>
-<div class="hero-orb orb-2" style="opacity:.05"></div>
+<div class="page">
 
-<div class="tf-page">
-  <div class="tf-wrap">
-
-    <!-- LEFT -->
-    <div class="tf-left">
-      <div class="tf-badge">
-        <span class="pill-dot"></span>Demo · Bez logowania
-      </div>
-      <h1 class="tf-h1">Zacznij<br>rozmawiać<br>z <em>AI</em> teraz</h1>
-      <p class="tf-desc">
-        Przetestuj InfratryAI bez zakładania konta.
-        Demo daje Ci dostęp do modelu Tytanium 3.7
-        i do 10 wiadomości na sesję.
-      </p>
-      <div class="tf-actions">
-        <a href="czat.html" class="btn btn-primary">✦ Rozpocznij demo</a>
-        <a href="index.html" class="btn btn-ghost">← Wróć do strony głównej</a>
-      </div>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="tf-right">
-      <div>
-        <div class="plan-label">Co obejmuje tryb darmowy</div>
-
-        <div class="plan-row">
-          <span class="plan-icon">✦</span>
-          <div class="plan-text">
-            <strong>Tytanium 3.7 (DeepSeek 671B)</strong>
-            Dostęp do najmocniejszego modelu w wersji demo
-          </div>
-        </div>
-        <div class="plan-row">
-          <span class="plan-icon">✦</span>
-          <div class="plan-text">
-            <strong>Streaming odpowiedzi</strong>
-            Tokeny pojawiają się na bieżąco, bez czekania
-          </div>
-        </div>
-        <div class="plan-row">
-          <span class="plan-icon">✦</span>
-          <div class="plan-text">
-            <strong>Wieloturnowe rozmowy</strong>
-            Model pamięta kontekst przez całą sesję
-          </div>
-        </div>
-        <div class="plan-row">
-          <span class="plan-icon">✦</span>
-          <div class="plan-text">
-            <strong>Markdown i bloki kodu</strong>
-            Formatowane odpowiedzi z podświetlaniem składni
-          </div>
-        </div>
-        <div class="plan-row limit">
-          <span class="plan-icon" style="opacity:.4">◌</span>
-          <div class="plan-text">
-            <strong>Limit 10 wiadomości / sesja</strong>
-            Historia nie jest zapisywana po odświeżeniu
-          </div>
-        </div>
-        <div class="plan-row limit">
-          <span class="plan-icon" style="opacity:.4">◌</span>
-          <div class="plan-text">
-            <strong>Brak modeli Thinking i Quantum</strong>
-            Dostępne po pełnej konfiguracji backendu
-          </div>
-        </div>
-      </div>
-
-      <div class="tf-note">
-        ⓘ Tryb demo wymaga działającego serwera proxy z Ollama. Jeśli backend jest offline, odpowiedzi nie będą generowane.
-      </div>
-    </div>
-
+  <!-- HERO -->
+  <div class="tf-hero">
+    <div class="tf-badge"><span class="pill-dot"></span>Demo · Bez logowania</div>
+    <h1 class="tf-h1">Zacznij rozmawiać<br>z <em>AI</em> teraz</h1>
+    <p class="tf-desc">Przetestuj InfratryAI bez zakładania konta. Wybierz model, zadaj pytanie i przekonaj się jak to działa.</p>
   </div>
+
+  <!-- MODEL PICKER -->
+  <div class="model-picker">
+    <div class="mp-label">Wybierz model</div>
+    <div class="mp-grid">
+      <div class="mp-card sel-blue selected" data-model="tytanium-3.7" onclick="selectModel(this)">
+        <div class="mp-check">✓</div>
+        <div class="mp-dot" style="background:var(--blue)"></div>
+        <div class="mp-name">Tytanium 3.7</div>
+        <div class="mp-alias">DeepSeek 671B</div>
+        <div class="mp-tags"><span class="mp-tag tb">Flagship</span><span class="mp-tag tb">128k</span></div>
+      </div>
+      <div class="mp-card sel-purple" data-model="thinking-2.4" onclick="selectModel(this)">
+        <div class="mp-check" style="background:var(--purple)">✓</div>
+        <div class="mp-dot" style="background:var(--purple)"></div>
+        <div class="mp-name">Thinking 2.4</div>
+        <div class="mp-alias">MiniMax Text-01</div>
+        <div class="mp-tags"><span class="mp-tag tp">CoT</span><span class="mp-tag tp">64k</span></div>
+      </div>
+      <div class="mp-card sel-teal" data-model="quantum-1.9" onclick="selectModel(this)">
+        <div class="mp-check" style="background:var(--teal)">✓</div>
+        <div class="mp-dot" style="background:var(--teal)"></div>
+        <div class="mp-name">Quantum 1.9</div>
+        <div class="mp-alias">Qwen 2.5 72B</div>
+        <div class="mp-tags"><span class="mp-tag tt">Multi</span><span class="mp-tag tt">100+ langs</span></div>
+      </div>
+    </div>
+    <div class="tf-cta">
+      <a href="#" class="btn btn-p" id="start-btn" onclick="startDemo()">✦ Rozpocznij demo</a>
+      <a href="index.html" class="btn btn-o">← Strona główna</a>
+    </div>
+  </div>
+
+  <!-- DEMO COUNTER -->
+  <div class="demo-counter">
+    <div class="dc-header">
+      <span class="dc-title">Wiadomości w tej sesji</span>
+      <span style="font-family:var(--serif);font-size:20px;font-style:italic;color:var(--t1)"><span id="dc-used">0</span><span style="color:var(--t3)">/10</span></span>
+    </div>
+    <div class="dc-bar"><div class="dc-fill" id="dc-fill"></div></div>
+    <div class="dc-hint">Demo pozwala na 10 wiadomości na sesję · Dane nie są zapisywane · Nie wymaga logowania</div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="feat-list">
+    <div class="feat-row">
+      <span class="feat-ic">✦</span>
+      <div class="feat-text"><strong>Streaming odpowiedzi</strong><span>Tokeny pojawiają się w czasie rzeczywistym</span></div>
+      <span class="feat-badge ok">Dostępne</span>
+    </div>
+    <div class="feat-row">
+      <span class="feat-ic">✦</span>
+      <div class="feat-text"><strong>Wieloturnowe rozmowy</strong><span>Kontekst zachowany przez całą sesję</span></div>
+      <span class="feat-badge ok">Dostępne</span>
+    </div>
+    <div class="feat-row">
+      <span class="feat-ic">✦</span>
+      <div class="feat-text"><strong>Formatowanie Markdown</strong><span>Kod, tabele, nagłówki, listy</span></div>
+      <span class="feat-badge ok">Dostępne</span>
+    </div>
+    <div class="feat-row">
+      <span class="feat-ic">◌</span>
+      <div class="feat-text"><strong>Historia rozmów</strong><span>Zapisywanie i przeglądanie rozmów</span></div>
+      <span class="feat-badge lim">10 wiad.</span>
+    </div>
+    <div class="feat-row limited">
+      <span class="feat-ic">◌</span>
+      <div class="feat-text"><strong>Eksport rozmów</strong><span>Pobieranie w formacie MD, TXT, JSON, HTML</span></div>
+      <span class="feat-badge no">Pełna wersja</span>
+    </div>
+    <div class="feat-row limited">
+      <span class="feat-ic">◌</span>
+      <div class="feat-text"><strong>Wszystkie modele</strong><span>Thinking 2.4 i Quantum 1.9 bez ograniczeń</span></div>
+      <span class="feat-badge no">Pełna wersja</span>
+    </div>
+  </div>
+
+  <!-- NOTE -->
+  <div class="tf-note">
+    <span class="tf-note-icon">ⓘ</span>
+    <span>Tryb demo wymaga działającego serwera proxy z Ollama. Jeśli backend jest offline, odpowiedzi nie będą generowane. Uruchom <code style="background:var(--s4);padding:1px 5px;border-radius:3px;font-size:10.5px">node api/server.js</code> przed użyciem.</span>
+  </div>
+
 </div>
 
-<script src="js/main.js"></script>
+<footer>
+  <div class="f-brand">Infratry<em>AI</em></div>
+  <ul class="f-nav"><li><a href="index.html">Home</a></li><li><a href="czat.html">Czat</a></li></ul>
+  <div class="f-copy">© 2025 InfratryAI</div>
+</footer>
+
+<script>
+let selectedModel = 'tytanium-3.7';
+const used = parseInt(sessionStorage.getItem('tf_used')||'0');
+
+function selectModel(card){
+  document.querySelectorAll('.mp-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedModel = card.dataset.model;
+}
+
+function startDemo(){
+  sessionStorage.setItem('tf_model', selectedModel);
+  window.location.href = 'czat.html?model=' + selectedModel + '&demo=1';
+}
+
+// Update counter from sessionStorage
+function updateCounter(){
+  const n = parseInt(sessionStorage.getItem('tf_used')||'0');
+  document.getElementById('dc-used').textContent = n;
+  document.getElementById('dc-fill').style.width = Math.min(n/10*100, 100) + '%';
+}
+updateCounter();
+
+// Hamburger
+const ham = document.getElementById('hamburger');
+const nav = document.getElementById('nav-links');
+if(ham && nav){
+  ham.addEventListener('click', e => { e.stopPropagation(); nav.classList.toggle('open'); });
+  document.addEventListener('click', e => { if(!ham.contains(e.target)&&!nav.contains(e.target)) nav.classList.remove('open'); });
+}
+</script>
 </body>
 </html>
