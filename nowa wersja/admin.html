@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — InfratryAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--s0:#06080c;--s1:#090c12;--s2:#0d1119;--s3:#121820;--s4:#181f2d;--s5:#1e2739;--s6:#263147;--b1:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.15);--t1:#edf1f9;--t2:#8b97ac;--t3:#4d5a6e;--t4:#2e3a4c;--blue:#5b9cf6;--purple:#a78bfa;--teal:#34d399;--amber:#fbbf24;--rose:#fb7185;--serif:'Instrument Serif',Georgia,serif;--mono:'Geist Mono','SF Mono',Menlo,monospace;--nav-h:56px;--sb-w:220px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--s0);color:var(--t1);font-family:var(--mono);font-size:13px;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:900;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(6,8,12,.95);backdrop-filter:blur(28px);border-bottom:1px solid var(--b1)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-mark{width:26px;height:26px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff}
+.nav-wordmark{font-family:var(--serif);font-size:16px;color:var(--t1)}
+.nav-wordmark em{font-style:italic;color:var(--blue)}
+.nav-badge{padding:3px 8px;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.2);border-radius:6px;font-size:9.5px;color:var(--amber);letter-spacing:.06em}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-status{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--t4)}
+.sdot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 2s ease-in-out infinite}
+.sdot.off{background:#ef4444;animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.nav-link{font-size:11px;color:var(--t3);text-decoration:none;padding:4px 8px;border-radius:6px;transition:all .2s}
+.nav-link:hover{color:var(--t1);background:var(--s4)}
+.nav-btn{padding:6px 12px;background:var(--s3);border:1px solid var(--b1);border-radius:8px;color:var(--t3);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .2s}
+.nav-btn:hover{background:var(--s4);color:var(--t1)}
+
+/* LAYOUT */
+.admin-root{display:flex;height:100vh;padding-top:var(--nav-h)}
+.sidebar{width:var(--sb-w);flex-shrink:0;background:var(--s1);border-right:1px solid var(--b1);display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--s5) transparent}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--s5)}
+.main{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--s5) transparent}
+.main::-webkit-scrollbar{width:3px}
+.main::-webkit-scrollbar-thumb{background:var(--s5)}
+
+/* SIDEBAR */
+.sb-section{padding:16px 12px 6px}
+.sb-label{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);padding:0 8px;margin-bottom:6px}
+.sb-link{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;color:var(--t3);text-decoration:none;font-size:12px;cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:all .18s;font-family:var(--mono);margin-bottom:2px}
+.sb-link:hover{color:var(--t1);background:var(--s3)}
+.sb-link.active{color:var(--t1);background:var(--s3)}
+.sb-link .ic{font-size:13px;opacity:.5;flex-shrink:0}
+.sb-link.active .ic{opacity:1}
+.sb-divider{height:1px;background:var(--b1);margin:8px 12px}
+.sb-version{padding:12px 16px;font-size:10.5px;color:var(--t4);border-top:1px solid var(--b1);margin-top:auto}
+
+/* PANELS */
+.panel{display:none;padding:32px 32px 48px}
+.panel.active{display:block}
+.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--b1)}
+.panel-title{font-family:var(--serif);font-size:22px;font-style:italic}
+.panel-subtitle{font-size:11.5px;color:var(--t3)}
+
+/* CARDS */
+.card{background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:22px 24px;margin-bottom:16px}
+.card-title{font-family:var(--serif);font-size:15px;font-style:italic;margin-bottom:16px;color:var(--t1)}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-box{background:var(--s2);border:1px solid var(--b1);border-radius:12px;padding:18px 20px}
+.stat-val{font-family:var(--serif);font-size:1.9rem;font-style:italic;line-height:1;margin-bottom:5px}
+.stat-val.vb{color:var(--blue)}.stat-val.vp{color:var(--purple)}.stat-val.vt{color:var(--teal)}.stat-val.va{color:var(--amber)}
+.stat-lbl{font-size:10.5px;color:var(--t3);letter-spacing:.04em;line-height:1.4}
+.stat-trend{font-size:10px;color:var(--teal);margin-top:4px}
+
+/* CHART */
+.chart-wrap{position:relative;height:180px;margin-top:12px}
+canvas{display:block;width:100%!important}
+
+/* ACTIVITY LOG */
+.log-list{display:flex;flex-direction:column;gap:0}
+.log-row{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--b1);font-size:11.5px}
+.log-row:last-child{border-bottom:none}
+.log-time{color:var(--t4);font-size:10.5px;white-space:nowrap;flex-shrink:0;padding-top:1px}
+.log-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.ld-ok{background:var(--teal)}.ld-warn{background:var(--amber)}.ld-err{background:var(--rose)}.ld-info{background:var(--blue)}
+.log-text{color:var(--t2);line-height:1.5}
+.log-badge{margin-left:auto;flex-shrink:0;font-size:9.5px;padding:2px 7px;border-radius:6px}
+.lb-ok{background:rgba(52,211,153,.1);color:var(--teal)}
+.lb-warn{background:rgba(251,191,36,.1);color:var(--amber)}
+.lb-err{background:rgba(251,113,133,.12);color:var(--rose)}
+
+/* MODEL ROWS */
+.model-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--b1)}
+.model-row:last-child{border-bottom:none}
+.mr-left{display:flex;align-items:center;gap:10px}
+.mr-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.mr-name{font-size:12.5px;color:var(--t1);font-weight:500}
+.mr-alias{font-size:10.5px;color:var(--t4);margin-top:2px}
+.mr-right{display:flex;align-items:center;gap:10px}
+.mr-status{font-size:10px;padding:2px 8px;border-radius:6px}
+.ms-ok{background:rgba(52,211,153,.1);color:var(--teal)}
+.ms-off{background:rgba(255,255,255,.04);color:var(--t4)}
+
+/* TOGGLE */
+.tog{position:relative;width:36px;height:18px;cursor:pointer;flex-shrink:0}
+.tog input{display:none}
+.tog-track{position:absolute;inset:0;background:var(--s5);border:1px solid var(--b2);border-radius:20px;transition:all .2s}
+.tog input:checked+.tog-track{background:var(--blue);border-color:var(--blue)}
+.tog-thumb{position:absolute;top:2px;left:2px;width:12px;height:12px;background:var(--t4);border-radius:50%;transition:all .2s}
+.tog input:checked~.tog-thumb{transform:translateX(18px);background:#fff}
+
+/* TABLE */
+.adm-table{width:100%;border-collapse:collapse}
+.adm-table th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t4);text-align:left;padding:8px 0 12px;border-bottom:1px solid var(--b1)}
+.adm-table td{padding:11px 0;border-bottom:1px solid var(--b1);font-size:12px;color:var(--t2);vertical-align:middle}
+.adm-table td:first-child{color:var(--t1);font-weight:500}
+.adm-table tr:last-child td{border-bottom:none}
+.adm-table tr:hover td{color:var(--t1)}
+
+/* ENV CONFIG */
+.env-row{display:flex;gap:12px;margin-bottom:10px;align-items:center}
+.env-key{font-size:11.5px;color:var(--t3);white-space:nowrap;min-width:140px}
+.env-val{flex:1;background:var(--s3);border:1px solid var(--b1);border-radius:8px;padding:7px 12px;color:var(--t1);font-family:var(--mono);font-size:12px;outline:none;transition:border-color .2s}
+.env-val:focus{border-color:rgba(91,156,246,.3)}
+.env-save{padding:7px 14px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-family:var(--mono);font-size:11.5px;cursor:pointer;transition:all .2s}
+.env-save:hover{background:#4a8fe8}
+.section-hint{font-size:11.5px;color:var(--t3);line-height:1.65;margin-bottom:16px}
+
+/* QUICK ACTIONS */
+.qa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.qa-btn{padding:14px 16px;background:var(--s3);border:1px solid var(--b1);border-radius:10px;color:var(--t2);font-family:var(--mono);font-size:11.5px;cursor:pointer;transition:all .2s;text-align:left;display:flex;flex-direction:column;gap:6px}
+.qa-btn:hover{background:var(--s4);color:var(--t1);transform:translateY(-1px)}
+.qa-icon{font-size:16px}
+.qa-label{font-size:11px;color:var(--t3)}
+
+/* ADMIN CHAT */
+.adm-chat{display:flex;flex-direction:column;height:calc(100vh - var(--nav-h) - 120px);background:var(--s2);border:1px solid var(--b1);border-radius:14px;overflow:hidden}
+.adm-chat-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--s3);border-bottom:1px solid var(--b1);flex-shrink:0}
+.adm-mtab{display:flex;align-items:center;gap:5px;padding:5px 11px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--t4);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.adm-mtab:hover{color:var(--t2);background:var(--s4)}
+.adm-mtab.ac{color:var(--t1);background:var(--s4);border-color:var(--b2)}
+.adm-mtab.ac.cb{color:var(--blue)}.adm-mtab.ac.cp{color:var(--purple)}.adm-mtab.ac.ct{color:var(--teal)}
+.adm-mdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.adm-messages{flex:1;overflow-y:auto;padding:16px;scrollbar-width:thin;scrollbar-color:var(--s5) transparent}
+.adm-messages::-webkit-scrollbar{width:3px}
+.adm-messages::-webkit-scrollbar-thumb{background:var(--s5)}
+.adm-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--b1);flex-shrink:0}
+.adm-ta{flex:1;background:var(--s3);border:1px solid var(--b2);border-radius:9px;color:var(--t1);font-family:var(--mono);font-size:12px;padding:8px 12px;resize:none;min-height:36px;max-height:100px;outline:none;transition:border-color .2s}
+.adm-ta:focus{border-color:rgba(91,156,246,.3)}
+.adm-ta::placeholder{color:var(--t4)}
+.adm-send{width:34px;height:34px;background:var(--blue);border:none;border-radius:8px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.adm-send:hover{background:#4a8fe8}
+.adm-send.stop{background:var(--s5);border:1px solid var(--b2);color:var(--t3)}
+
+/* Chat bubbles in admin */
+.adm-user-row{display:flex;justify-content:flex-end;margin-bottom:14px}
+.adm-user-bub{background:var(--s4);border:1px solid var(--b2);border-radius:12px 12px 3px 12px;padding:9px 13px;font-size:12px;color:var(--t1);max-width:70%;white-space:pre-wrap}
+.adm-ai-row{display:flex;gap:10px;margin-bottom:14px}
+.adm-ai-av{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff;flex-shrink:0;margin-top:1px}
+.adm-ai-text{font-size:12px;color:var(--t1);line-height:1.7}
+.adm-ai-text code{font-family:var(--mono);font-size:11px;background:rgba(91,156,246,.08);border:1px solid rgba(91,156,246,.12);color:var(--blue);padding:1px 5px;border-radius:3px}
+.adm-ai-text pre{background:var(--s3);border:1px solid var(--b1);border-radius:8px;padding:10px 12px;margin:8px 0;overflow-x:auto}
+.adm-ai-text pre code{background:none;border:none;padding:0;color:var(--t1);display:block}
+.adm-think{display:flex;gap:5px;align-items:center;padding:4px 0}
+.adm-think span{width:5px;height:5px;border-radius:50%;background:var(--t4);animation:tb 1.4s ease-in-out infinite}
+.adm-think span:nth-child(2){animation-delay:.2s}.adm-think span:nth-child(3){animation-delay:.4s}
+@keyframes tb{0%,80%,100%{transform:scale(.7);opacity:.3}40%{transform:scale(1);opacity:1}}
+.adm-scur{display:inline-block;width:2px;height:12px;background:var(--blue);vertical-align:text-bottom;margin-left:2px;animation:cb .8s step-end infinite}
+@keyframes cb{0%,100%{opacity:1}50%{opacity:0}}
+
+/* toast */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--s3);border:1px solid var(--b2);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--t1);z-index:1000;display:flex;align-items:center;gap:8px;box-shadow:0 8px 32px rgba(0,0,0,.4);animation:tin .25s ease both}
+@keyframes tin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* RESPONSIVE */
+@media(max-width:900px){.stat-grid{grid-template-columns:repeat(2,1fr)}.qa-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.sidebar{display:none}.panel{padding:20px 16px}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-mark">IA</div>
+      <span class="nav-wordmark">Infratry<em>AI</em></span>
+    </a>
+    <span class="nav-badge">ADMIN</span>
+  </div>
+  <div class="nav-right">
+    <div class="nav-status">
+      <span class="sdot" id="sdot"></span>
+      <span id="stxt">Sprawdzam…</span>
+    </div>
+    <a href="czat.html" class="nav-link">→ Czat</a>
+    <a href="index.html" class="nav-link">Home</a>
+    <button class="nav-btn" onclick="showPanel('logs')">📋 Logi</button>
+  </div>
+</nav>
+
+<div class="admin-root">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-section">
+      <div class="sb-label">Główne</div>
+      <button class="sb-link active" data-panel="dashboard"><span class="ic">◈</span>Dashboard</button>
+      <button class="sb-link" data-panel="chat"><span class="ic">◇</span>Czat testowy</button>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-label">Konfiguracja</div>
+      <button class="sb-link" data-panel="models"><span class="ic">◈</span>Modele AI</button>
+      <button class="sb-link" data-panel="env"><span class="ic">◇</span>Zmienne env</button>
+      <button class="sb-link" data-panel="pages"><span class="ic">◈</span>Strony</button>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-label">Monitoring</div>
+      <button class="sb-link" data-panel="stats"><span class="ic">◈</span>Statystyki</button>
+      <button class="sb-link" data-panel="logs"><span class="ic">◇</span>Logi systemu</button>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <a href="index.html" class="sb-link"><span class="ic">←</span>Strona główna</a>
+    </div>
+    <div class="sb-version">InfratryAI v3.0 · Admin Panel</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="panel-header">
+        <div class="panel-title">Dashboard</div>
+        <div class="panel-subtitle" id="last-check">Sprawdzam status…</div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-val vb" id="s-msgs">—</div><div class="stat-lbl">Wiadomości dziś</div><div class="stat-trend" id="t-msgs"></div></div>
+        <div class="stat-box"><div class="stat-val vp">3</div><div class="stat-lbl">Aktywne modele</div></div>
+        <div class="stat-box"><div class="stat-val vt" id="s-sessions">—</div><div class="stat-lbl">Sesje dziś</div></div>
+        <div class="stat-box"><div class="stat-val va" id="s-errors">0</div><div class="stat-lbl">Błędy (24h)</div></div>
+      </div>
+
+      <!-- Chart -->
+      <div class="card">
+        <div class="card-title">Aktywność (ostatnie 7 dni)</div>
+        <div class="chart-wrap"><canvas id="chart-activity"></canvas></div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="card">
+        <div class="card-title">Szybkie akcje</div>
+        <div class="qa-grid">
+          <button class="qa-btn" onclick="showPanel('chat')"><span class="qa-icon">◇</span><span>Czat testowy</span><span class="qa-label">Przetestuj modele</span></button>
+          <button class="qa-btn" onclick="showPanel('models')"><span class="qa-icon">⚙</span><span>Modele</span><span class="qa-label">Konfiguruj dostęp</span></button>
+          <button class="qa-btn" onclick="showPanel('logs')"><span class="qa-icon">📋</span><span>Logi</span><span class="qa-label">Przejrzyj zdarzenia</span></button>
+          <button class="qa-btn" onclick="showPanel('env')"><span class="qa-icon">🔧</span><span>Zmienne env</span><span class="qa-label">Konfiguracja backendu</span></button>
+          <button class="qa-btn" onclick="showPanel('stats')"><span class="qa-icon">📊</span><span>Statystyki</span><span class="qa-label">Dane użycia</span></button>
+          <a class="qa-btn" href="czat.html" target="_blank"><span class="qa-icon">→</span><span>Otwórz czat</span><span class="qa-label">Nowa karta</span></a>
+        </div>
+      </div>
+
+      <!-- Backend status -->
+      <div class="card">
+        <div class="card-title">Status backendu</div>
+        <div id="backend-detail" style="font-size:12px;color:var(--t2);line-height:1.9">Ładowanie…</div>
+      </div>
+    </div>
+
+    <!-- CHAT TEST -->
+    <div class="panel" id="panel-chat">
+      <div class="panel-header">
+        <div class="panel-title">Czat testowy</div>
+        <div class="panel-subtitle">Pełny dostęp · bez limitu wiadomości</div>
+      </div>
+      <div class="adm-chat">
+        <div class="adm-chat-bar">
+          <button class="adm-mtab ac cb" data-m="tytanium-3.7" onclick="admSwitchModel(this,'tytanium-3.7','cb')"><span class="adm-mdot" style="background:var(--blue)"></span>Tytanium 3.7</button>
+          <button class="adm-mtab" data-m="thinking-2.4" onclick="admSwitchModel(this,'thinking-2.4','cp')"><span class="adm-mdot" style="background:var(--purple)"></span>Thinking 2.4</button>
+          <button class="adm-mtab" data-m="quantum-1.9" onclick="admSwitchModel(this,'quantum-1.9','ct')"><span class="adm-mdot" style="background:var(--teal)"></span>Quantum 1.9</button>
+          <div style="flex:1"></div>
+          <button onclick="admClear()" style="font-size:10.5px;padding:4px 10px;background:var(--s4);border:1px solid var(--b1);border-radius:6px;color:var(--t3);cursor:pointer;font-family:var(--mono)">Wyczyść</button>
+        </div>
+        <div class="adm-messages" id="adm-msgs"></div>
+        <div class="adm-input-row">
+          <textarea class="adm-ta" id="adm-ta" placeholder="Napisz wiadomość…" rows="1" onkeydown="admKey(event)"></textarea>
+          <button class="adm-send" id="adm-send" onclick="admSend()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODELS -->
+    <div class="panel" id="panel-models">
+      <div class="panel-header"><div class="panel-title">Zarządzanie modelami</div></div>
+      <div class="card">
+        <div class="card-title">Aktywne modele</div>
+        <div class="model-row">
+          <div class="mr-left"><div class="mr-dot" style="background:var(--blue)"></div><div><div class="mr-name">Tytanium 3.7</div><div class="mr-alias">→ deepseek-r1:671b · 128k ctx · Reasoning</div></div></div>
+          <div class="mr-right"><span class="mr-status ms-ok" id="ms-tytanium">Sprawdzam…</span><label class="tog"><input type="checkbox" checked id="tog-t37"><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
+        </div>
+        <div class="model-row">
+          <div class="mr-left"><div class="mr-dot" style="background:var(--purple)"></div><div><div class="mr-name">Thinking 2.4</div><div class="mr-alias">→ minimax-text-01 · 64k ctx · CoT</div></div></div>
+          <div class="mr-right"><span class="mr-status ms-ok" id="ms-thinking">Sprawdzam…</span><label class="tog"><input type="checkbox" checked id="tog-t24"><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
+        </div>
+        <div class="model-row">
+          <div class="mr-left"><div class="mr-dot" style="background:var(--teal)"></div><div><div class="mr-name">Quantum 1.9</div><div class="mr-alias">→ qwen2.5:72b · 32k ctx · Multilingual</div></div></div>
+          <div class="mr-right"><span class="mr-status ms-ok" id="ms-quantum">Sprawdzam…</span><label class="tog"><input type="checkbox" checked id="tog-q19"><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Mapowanie nazw</div>
+        <p class="section-hint">Nazwy marketingowe są mapowane na modele Ollama przez backend proxy. Zmień mapowanie w pliku <code style="background:var(--s3);padding:1px 5px;border-radius:3px">api/server.js</code>.</p>
+        <table class="adm-table">
+          <thead><tr><th>Nazwa publiczna</th><th>Model Ollama</th><th>Kontekst</th></tr></thead>
+          <tbody>
+            <tr><td>Tytanium 3.7</td><td style="color:var(--blue)">deepseek-r1:671b</td><td>128 000 tok</td></tr>
+            <tr><td>Thinking 2.4</td><td style="color:var(--purple)">minimax-text-01</td><td>64 000 tok</td></tr>
+            <tr><td>Quantum 1.9</td><td style="color:var(--teal)">qwen2.5:72b</td><td>32 000 tok</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ENV CONFIG -->
+    <div class="panel" id="panel-env">
+      <div class="panel-header"><div class="panel-title">Zmienne środowiskowe</div></div>
+      <div class="card">
+        <div class="card-title">Konfiguracja backendu</div>
+        <p class="section-hint">Zmienne są tylko podglądem — ustaw je w pliku <code style="background:var(--s3);padding:1px 5px;border-radius:3px">.env</code> lub jako zmienne środowiskowe systemu.</p>
+        <div class="env-row">
+          <span class="env-key">OLLAMA_URL</span>
+          <input class="env-val" type="text" value="http://localhost:11434" id="env-ollama">
+          <button class="env-save" onclick="saveEnv()">Zapisz</button>
+        </div>
+        <div class="env-row">
+          <span class="env-key">PORT</span>
+          <input class="env-val" type="text" value="3000" id="env-port">
+        </div>
+        <div class="env-row">
+          <span class="env-key">DEMO_MSG_LIMIT</span>
+          <input class="env-val" type="text" value="10" id="env-limit">
+        </div>
+        <div class="env-row">
+          <span class="env-key">ALLOWED_ORIGINS</span>
+          <input class="env-val" type="text" value="http://localhost:3000" id="env-origins">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Komendy uruchomienia</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="background:var(--s3);border:1px solid var(--b1);border-radius:8px;padding:12px 14px">
+            <div style="font-size:10px;color:var(--t4);margin-bottom:6px;letter-spacing:.08em">DEVELOPMENT</div>
+            <code style="font-size:12px;color:var(--teal)">cd api && npm install && node server.js</code>
+          </div>
+          <div style="background:var(--s3);border:1px solid var(--b1);border-radius:8px;padding:12px 14px">
+            <div style="font-size:10px;color:var(--t4);margin-bottom:6px;letter-spacing:.08em">PRODUCTION</div>
+            <code style="font-size:12px;color:var(--teal)">PORT=8080 OLLAMA_URL=http://your-server:11434 node server.js</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGES -->
+    <div class="panel" id="panel-pages">
+      <div class="panel-header"><div class="panel-title">Strony</div></div>
+      <div class="card">
+        <div class="card-title">Pliki HTML</div>
+        <table class="adm-table">
+          <thead><tr><th>Plik</th><th>Opis</th><th>Status</th><th>Akcja</th></tr></thead>
+          <tbody>
+            <tr><td>index.html</td><td>Strona główna</td><td style="color:var(--teal)">Publiczna</td><td><a href="index.html" style="color:var(--blue);font-size:11px;text-decoration:none">Podgląd →</a></td></tr>
+            <tr><td>czat.html</td><td>Interfejs czatu AI</td><td style="color:var(--teal)">Publiczna</td><td><a href="czat.html" style="color:var(--blue);font-size:11px;text-decoration:none">Podgląd →</a></td></tr>
+            <tr><td>try-free.html</td><td>Demo</td><td style="color:var(--teal)">Publiczna</td><td><a href="try-free.html" style="color:var(--blue);font-size:11px;text-decoration:none">Podgląd →</a></td></tr>
+            <tr><td>admin.html</td><td>Panel admina</td><td style="color:var(--amber)">Prywatna</td><td><span style="font-size:11px;color:var(--t4)">Tu jesteś</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="panel" id="panel-stats">
+      <div class="panel-header"><div class="panel-title">Statystyki</div></div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-val vb">—</div><div class="stat-lbl">Łączne wiadomości</div></div>
+        <div class="stat-box"><div class="stat-val vp">—</div><div class="stat-lbl">Unikalne sesje</div></div>
+        <div class="stat-box"><div class="stat-val vt">—</div><div class="stat-lbl">Śr. dł. odpowiedzi</div></div>
+        <div class="stat-box"><div class="stat-val va">—</div><div class="stat-lbl">Avg czas odpowiedzi</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Użycie modeli</div>
+        <div class="chart-wrap"><canvas id="chart-models"></canvas></div>
+      </div>
+      <div class="card">
+        <p class="section-hint">Pełne statystyki będą dostępne po podłączeniu bazy danych do backendu proxy. Dodaj middleware logujący do <code style="background:var(--s3);padding:1px 5px;border-radius:3px">api/server.js</code>.</p>
+      </div>
+    </div>
+
+    <!-- LOGS -->
+    <div class="panel" id="panel-logs">
+      <div class="panel-header">
+        <div class="panel-title">Logi systemu</div>
+        <button onclick="refreshLogs()" style="padding:5px 12px;background:var(--s3);border:1px solid var(--b1);border-radius:7px;color:var(--t2);font-family:var(--mono);font-size:11px;cursor:pointer">↻ Odśwież</button>
+      </div>
+      <div class="card">
+        <div class="log-list" id="log-list">
+          <div style="font-size:12px;color:var(--t4);padding:12px 0;text-align:center">Ładowanie logów…</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const PROXY_URL  = '/api/chat';
+const STATUS_URL = '/api/status';
+
+// ── Panel switching ──
+function showPanel(id){
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-link[data-panel]').forEach(l => l.classList.remove('active'));
+  document.getElementById('panel-'+id)?.classList.add('active');
+  document.querySelector(`[data-panel="${id}"]`)?.classList.add('active');
+}
+document.querySelectorAll('.sb-link[data-panel]').forEach(btn => btn.addEventListener('click', () => showPanel(btn.dataset.panel)));
+
+// ── Status check ──
+async function checkStatus(){
+  const dot=document.getElementById('sdot'), txt=document.getElementById('stxt');
+  const detail=document.getElementById('backend-detail');
+  const last=document.getElementById('last-check');
+  try {
+    const t0=performance.now();
+    const r = await fetch(STATUS_URL,{signal:AbortSignal.timeout(5000)});
+    const ms = Math.round(performance.now()-t0);
+    const isOk = r.ok;
+    dot.className='sdot'+(isOk?'':' off');
+    txt.textContent=isOk?'Online':'Offline';
+    last.textContent='Ostatnie sprawdzenie: '+new Date().toLocaleTimeString('pl-PL');
+    detail.innerHTML = isOk
+      ? `✦ Proxy działa poprawnie <span style="color:var(--t4)">(${ms}ms)</span><br>✦ Ollama odpowiada na zapytania<br>✦ Wszystkie endpointy aktywne<br><br><span style="color:var(--t4);font-size:11px">Endpoint: <code style="background:var(--s3);padding:1px 4px;border-radius:3px">POST /api/chat</code> · <code style="background:var(--s3);padding:1px 4px;border-radius:3px">GET /api/status</code></span>`
+      : `⚠️ Proxy nie odpowiada.<br>Sprawdź czy <code style="background:var(--s3);padding:1px 4px;border-radius:3px">node api/server.js</code> jest uruchomione.<br><span style="color:var(--t4);font-size:11px">Spróbuj: <code style="background:var(--s3);padding:1px 4px;border-radius:3px">cd api && node server.js</code></span>`;
+    // Update model status indicators
+    const ms_status = isOk ? '<span style="background:rgba(52,211,153,.1);color:var(--teal)">Dostępny</span>' : '<span style="background:rgba(255,255,255,.04);color:var(--t4)">Offline</span>';
+    ['tytanium','thinking','quantum'].forEach(k => { const el=document.getElementById('ms-'+k); if(el) el.innerHTML=ms_status; });
+  } catch {
+    dot.className='sdot off'; txt.textContent='Offline';
+    detail.innerHTML='⚠️ Brak połączenia z backendem.';
+  }
+}
+checkStatus(); setInterval(checkStatus, 30000);
+
+// ── Charts ──
+function drawActivityChart(){
+  const canvas=document.getElementById('chart-activity');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  canvas.width=canvas.offsetWidth*devicePixelRatio||800;
+  canvas.height=180*devicePixelRatio;
+  ctx.scale(devicePixelRatio,devicePixelRatio);
+  const W=canvas.offsetWidth||800, H=180;
+  const days=['Pon','Wt','Śr','Czw','Pt','Sob','Nd'];
+  const vals=[12,28,19,34,22,8,15];
+  const max=Math.max(...vals)*1.2;
+  ctx.clearRect(0,0,W,H);
+  const pad={l:30,r:20,t:10,b:30};
+  const iW=W-pad.l-pad.r, iH=H-pad.t-pad.b;
+  // Grid lines
+  for(let i=0;i<=4;i++){
+    const y=pad.t+iH*(1-i/4);
+    ctx.strokeStyle='rgba(255,255,255,.05)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(pad.l+iW,y); ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.25)'; ctx.font='9px Geist Mono,monospace';
+    ctx.fillText(Math.round(max*i/4),2,y+3);
+  }
+  // Bars
+  const bw=iW/days.length*0.55;
+  vals.forEach((v,i)=>{
+    const x=pad.l+iW/(days.length)*(i+0.5)-bw/2;
+    const bh=(v/max)*iH;
+    const y=pad.t+iH-bh;
+    const grad=ctx.createLinearGradient(0,y,0,y+bh);
+    grad.addColorStop(0,'rgba(91,156,246,.8)');
+    grad.addColorStop(1,'rgba(91,156,246,.2)');
+    ctx.fillStyle=grad;
+    ctx.beginPath(); ctx.roundRect(x,y,bw,bh,3); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.35)'; ctx.font='9px Geist Mono,monospace';
+    ctx.textAlign='center'; ctx.fillText(days[i],x+bw/2,H-10);
+  });
+}
+
+function drawModelsChart(){
+  const canvas=document.getElementById('chart-models');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  canvas.width=canvas.offsetWidth*devicePixelRatio||800;
+  canvas.height=160*devicePixelRatio;
+  ctx.scale(devicePixelRatio,devicePixelRatio);
+  const W=canvas.offsetWidth||800, H=160;
+  const models=[{n:'Tytanium 3.7',v:65,c:'#5b9cf6'},{n:'Thinking 2.4',v:22,c:'#a78bfa'},{n:'Quantum 1.9',v:13,c:'#34d399'}];
+  const pad=12;
+  ctx.clearRect(0,0,W,H);
+  let x=pad;
+  const bh=22;
+  models.forEach((m,i)=>{
+    const y=pad+i*(bh+16);
+    const fw=(W-pad*2-120)*m.v/100;
+    ctx.fillStyle='rgba(255,255,255,.05)'; ctx.beginPath(); ctx.roundRect(x+110,y,(W-pad*2-120),bh,4); ctx.fill();
+    const grad=ctx.createLinearGradient(x+110,0,x+110+fw,0);
+    grad.addColorStop(0,m.c+'cc'); grad.addColorStop(1,m.c+'44');
+    ctx.fillStyle=grad; ctx.beginPath(); ctx.roundRect(x+110,y,fw,bh,4); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.5)'; ctx.font='11px Geist Mono,monospace'; ctx.textAlign='left';
+    ctx.fillText(m.n,x,y+bh/2+4);
+    ctx.fillStyle=m.c; ctx.textAlign='right';
+    ctx.fillText(m.v+'%',W-pad,y+bh/2+4);
+  });
+}
+
+setTimeout(()=>{ drawActivityChart(); drawModelsChart(); }, 200);
+window.addEventListener('resize', ()=>{ drawActivityChart(); drawModelsChart(); });
+
+// ── Logs ──
+const mockLogs = [
+  {t:'13:42:11',dot:'ld-ok',text:'POST /api/chat → tytanium-3.7 · 847ms',badge:'lb-ok',blabel:'200 OK'},
+  {t:'13:41:55',dot:'ld-ok',text:'GET /api/status · 2ms',badge:'lb-ok',blabel:'200 OK'},
+  {t:'13:38:22',dot:'ld-ok',text:'POST /api/chat → thinking-2.4 · 1.2s',badge:'lb-ok',blabel:'200 OK'},
+  {t:'13:35:10',dot:'ld-warn',text:'POST /api/chat → quantum-1.9 · timeout po 30s',badge:'lb-warn',blabel:'Timeout'},
+  {t:'13:30:01',dot:'ld-info',text:'Serwer proxy uruchomiony na port 3000',badge:'',blabel:''},
+  {t:'13:29:58',dot:'ld-info',text:'Połączenie z Ollama (http://localhost:11434) OK',badge:'lb-ok',blabel:'Connected'},
+];
+
+function refreshLogs(){
+  const list = document.getElementById('log-list');
+  const now = new Date();
+  const newLog = {t:now.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit',second:'2-digit'}),dot:'ld-ok',text:'GET /api/status · 3ms',badge:'lb-ok',blabel:'200 OK'};
+  mockLogs.unshift(newLog);
+  renderLogs();
+  showToast('↻', 'Logi odświeżone');
+}
+
+function renderLogs(){
+  const list = document.getElementById('log-list');
+  list.innerHTML = mockLogs.map(l => `
+    <div class="log-row">
+      <span class="log-time">${l.t}</span>
+      <span class="log-dot ${l.dot}"></span>
+      <span class="log-text">${l.text}</span>
+      ${l.badge ? `<span class="log-badge ${l.badge}">${l.blabel}</span>` : ''}
+    </div>`).join('');
+}
+renderLogs();
+
+// ── ENV Save ──
+function saveEnv(){ showToast('✓', 'Zmienne zapisane (restart serwera wymagany)'); }
+
+// ── Admin Chat ──
+let admModel='tytanium-3.7', admMessages=[], admStreaming=false, admAbort=null;
+
+function admSwitchModel(btn, model, cls){
+  document.querySelectorAll('.adm-mtab').forEach(b => b.classList.remove('ac','cb','cp','ct'));
+  btn.classList.add('ac', cls);
+  admModel = model;
+}
+
+function admClear(){ admMessages=[]; document.getElementById('adm-msgs').innerHTML=''; }
+
+function admKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); admSend(); } }
+
+async function admSend(){
+  const ta=document.getElementById('adm-ta');
+  const text=ta.value.trim();
+  if(!text||admStreaming) return;
+  ta.value=''; ta.style.height='auto';
+  admMessages.push({role:'user',content:text});
+  const msgs=document.getElementById('adm-msgs');
+  msgs.innerHTML+=`<div class="adm-user-row"><div class="adm-user-bub">${escHtml(text)}</div></div>`;
+  admStreaming=true;
+  const sendBtn=document.getElementById('adm-send');
+  sendBtn.className='adm-send stop';
+  sendBtn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>';
+  sendBtn.onclick=()=>admAbort?.abort();
+  admAbort=new AbortController();
+  const thinkDiv=document.createElement('div');
+  thinkDiv.className='adm-ai-row';
+  thinkDiv.innerHTML='<div class="adm-ai-av">AI</div><div class="adm-think"><span></span><span></span><span></span></div>';
+  msgs.appendChild(thinkDiv);
+  msgs.scrollTop=msgs.scrollHeight;
+  let reply=''; let bubbleEl=null;
+  try {
+    const res=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:admModel,messages:[...admMessages]}),signal:admAbort.signal});
+    if(!res.ok) throw new Error();
+    thinkDiv.remove();
+    const row=document.createElement('div'); row.className='adm-ai-row';
+    row.innerHTML='<div class="adm-ai-av">AI</div><div class="adm-ai-text"></div>';
+    msgs.appendChild(row); bubbleEl=row.querySelector('.adm-ai-text');
+    const reader=res.body.getReader(),dec=new TextDecoder(); let buf='';
+    while(true){ const {done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop(); for(const l of lines){ if(!l.trim()) continue; try{ const c=JSON.parse(l); const t=c?.message?.content??c?.response??''; if(t){reply+=t;bubbleEl.innerHTML=admMd(reply)+'<span class="adm-scur"></span>';msgs.scrollTop=msgs.scrollHeight;} if(c.done) break; } catch{} } }
+  } catch(err){ thinkDiv?.remove(); if(!bubbleEl){ const r=document.createElement('div'); r.className='adm-ai-row'; r.innerHTML='<div class="adm-ai-av">AI</div><div class="adm-ai-text"></div>'; msgs.appendChild(r); bubbleEl=r.querySelector('.adm-ai-text'); } if(err.name!=='AbortError') reply='⚠️ Błąd połączenia.'; }
+  finally{
+    if(bubbleEl) bubbleEl.innerHTML=admMd(reply||'_(Brak)_');
+    if(reply) admMessages.push({role:'assistant',content:reply});
+    admStreaming=false; admAbort=null;
+    sendBtn.className='adm-send'; sendBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>'; sendBtn.onclick=admSend;
+    msgs.scrollTop=msgs.scrollHeight;
+  }
+}
+
+function admMd(s){
+  s=s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  s=s.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,l,c)=>`<pre><code>${c.trimEnd()}</code></pre>`);
+  s=s.replace(/`([^`\n]+)`/g,'<code>$1</code>');
+  s=s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  s=s.replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+  return s;
+}
+
+// ── Toast ──
+function showToast(icon,msg){ const t=document.createElement('div'); t.className='toast'; t.innerHTML=icon+' '+escHtml(msg); document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+</script>
+</body>
+</html>

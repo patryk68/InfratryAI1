@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfratryAI — Rozmawiaj z najlepszymi modelami AI</title>
+<meta name="description" content="Interaktywny czat AI z modelami DeepSeek 600B, MiniMax i Qwen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --s0:#06080c;--s1:#090c12;--s2:#0d1119;--s3:#121820;--s4:#181f2d;--s5:#1e2739;--s6:#263147;
+  --b1:rgba(255,255,255,0.05);--b2:rgba(255,255,255,0.09);--b3:rgba(255,255,255,0.14);
+  --t1:#edf1f9;--t2:#8b97ac;--t3:#4d5a6e;--t4:#2e3a4c;
+  --blue:#5b9cf6;--purple:#a78bfa;--teal:#34d399;--amber:#fbbf24;
+  --serif:'Instrument Serif',Georgia,serif;
+  --mono:'Geist Mono','SF Mono',Menlo,monospace;
+  --nav-h:60px;--max:1100px;--r:10px;--r-lg:16px;--r-xl:24px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--mono);background:var(--s0);color:var(--t1);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(91,156,246,.05) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 90% 100%,rgba(167,139,250,.04) 0%,transparent 50%);pointer-events:none;z-index:0}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:900;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(6,8,12,.92);backdrop-filter:blur(28px);border-bottom:1px solid var(--b1)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-mark{width:28px;height:28px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;letter-spacing:-.5px}
+.nav-wordmark{font-family:var(--serif);font-size:17px;color:var(--t1)}
+.nav-wordmark em{font-style:italic;color:var(--blue)}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none}
+.nav-links a{display:block;padding:6px 12px;color:var(--t3);text-decoration:none;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;border-radius:8px;transition:all .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--t1);background:var(--s4)}
+.nav-cta{background:var(--blue)!important;color:#fff!important;font-weight:500!important;padding:6px 16px!important}
+.nav-cta:hover{background:#4a8fe8!important;transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;border-radius:6px}
+.hamburger span{display:block;width:20px;height:1.5px;background:var(--t2);border-radius:2px;transition:all .25s}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:calc(var(--nav-h) + 80px) 28px 80px;overflow:hidden;z-index:1}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(91,156,246,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,156,246,.03) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 75% 75% at 40% 40%,black 20%,transparent 100%);pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none}
+.orb1{width:700px;height:700px;top:-200px;left:-200px;background:radial-gradient(circle,rgba(91,156,246,.13),transparent 65%);animation:drift 12s ease-in-out infinite}
+.orb2{width:500px;height:500px;bottom:-100px;right:-100px;background:radial-gradient(circle,rgba(167,139,250,.09),transparent 65%);animation:drift 15s ease-in-out infinite reverse}
+.orb3{width:300px;height:300px;top:40%;left:55%;background:radial-gradient(circle,rgba(52,211,153,.06),transparent 65%);animation:drift 9s ease-in-out infinite 3s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.04)}66%{transform:translate(-20px,15px) scale(.97)}}
+.hero-inner{position:relative;z-index:1;max-width:660px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;background:rgba(91,156,246,.08);border:1px solid rgba(91,156,246,.2);border-radius:100px;font-size:11px;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:32px;animation:fadeup .7s ease both}
+.pill-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-h1{font-family:var(--serif);font-size:clamp(3rem,6.5vw,5.5rem);font-weight:400;line-height:1.06;letter-spacing:-.02em;margin-bottom:28px;animation:fadeup .7s ease .1s both}
+.hero-h1 em{font-style:italic;color:var(--blue)}
+.hero-h1 .dim{color:var(--t3)}
+.hero-desc{font-size:13.5px;color:var(--t2);max-width:440px;margin-bottom:36px;line-height:1.75;animation:fadeup .7s ease .2s both}
+.hero-ctas{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:44px;animation:fadeup .7s ease .3s both}
+.mchips{display:flex;flex-wrap:wrap;gap:8px;animation:fadeup .7s ease .4s both}
+.mchip{display:flex;align-items:center;gap:6px;padding:5px 12px;background:var(--s3);border:1px solid var(--b2);border-radius:100px;font-size:11px;color:var(--t3)}
+.mchip-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.md-blue{background:var(--blue)}.md-purple{background:var(--purple)}.md-teal{background:var(--teal)}
+
+/* Hero visual */
+.hero-visual{position:absolute;right:28px;top:50%;transform:translateY(-50%);width:400px;animation:fadeup .9s ease .5s both;pointer-events:none}
+.mockup{background:var(--s2);border:1px solid var(--b2);border-radius:20px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 60px rgba(91,156,246,.1)}
+.mbar{display:flex;align-items:center;gap:6px;padding:11px 16px;background:var(--s3);border-bottom:1px solid var(--b1)}
+.mdot{width:8px;height:8px;border-radius:50%}
+.mdot.r{background:#ff5f56}.mdot.y{background:#ffbd2e}.mdot.g{background:#27c93f}
+.mtitle{margin-left:6px;font-size:10.5px;color:var(--t4)}
+.mbody{padding:18px 14px;display:flex;flex-direction:column;gap:12px}
+.mmsg{display:flex;gap:9px}
+.mmsg.mu{flex-direction:row-reverse}
+.mav{width:22px;height:22px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff}
+.mav.ai{background:linear-gradient(135deg,var(--blue),var(--purple))}.mav.u{background:var(--s5);color:var(--t3)}
+.mb{padding:8px 12px;border-radius:10px;font-size:11px;line-height:1.55;max-width:75%}
+.mmsg.ai .mb{background:var(--s3);border:1px solid var(--b1);color:var(--t2)}
+.mmsg.mu .mb{background:var(--s5);border:1px solid var(--b2);color:var(--t2)}
+.mcur{display:inline-block;width:2px;height:11px;background:var(--blue);vertical-align:middle;margin-left:2px;animation:blink .8s step-end infinite}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:var(--r);font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.03em;text-decoration:none;cursor:pointer;border:none;transition:all .2s ease;white-space:nowrap}
+.btn-p{background:var(--blue);color:#fff;box-shadow:0 0 24px rgba(91,156,246,.22)}
+.btn-p:hover{background:#4a8fe8;box-shadow:0 0 40px rgba(91,156,246,.35);transform:translateY(-1px)}
+.btn-o{background:transparent;color:var(--t2);border:1px solid var(--b2)}
+.btn-o:hover{background:var(--s3);border-color:var(--b3);color:var(--t1);transform:translateY(-1px)}
+
+/* SECTIONS */
+.sec{position:relative;z-index:1;padding:80px 28px}
+.sec-inner{max-width:var(--max);margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
+.eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--blue);opacity:.5}
+.sec-h2{font-family:var(--serif);font-size:clamp(1.9rem,3.5vw,3rem);font-weight:400;line-height:1.15;letter-spacing:-.02em;margin-bottom:14px}
+.sec-h2 em{font-style:italic;color:var(--blue)}
+.sec-p{font-size:13px;color:var(--t2);max-width:460px;line-height:1.75;margin-bottom:52px}
+
+/* FEATURES GRID */
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--b1);border:1px solid var(--b1);border-radius:var(--r-xl);overflow:hidden}
+.feat-cell{background:var(--s1);padding:40px 36px;transition:background .3s;position:relative;overflow:hidden}
+.feat-cell::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--b3),transparent);opacity:0;transition:opacity .3s}
+.feat-cell:hover{background:var(--s2)}.feat-cell:hover::after{opacity:1}
+.feat-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:20px}
+.fi-b{background:rgba(91,156,246,.1)}.fi-p{background:rgba(167,139,250,.1)}.fi-t{background:rgba(52,211,153,.1)}.fi-a{background:rgba(251,191,36,.1)}
+.feat-h{font-family:var(--serif);font-size:17px;font-style:italic;margin-bottom:8px;color:var(--t1)}
+.feat-p{font-size:12.5px;color:var(--t3);line-height:1.7}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--b1);border-radius:var(--r-lg);overflow:hidden;margin-bottom:0}
+.stat-cell{padding:32px 28px;border-right:1px solid var(--b1);background:var(--s1)}
+.stat-cell:last-child{border-right:none}
+.stat-n{font-family:var(--serif);font-size:2.8rem;font-style:italic;color:var(--t1);line-height:1;margin-bottom:6px}
+.stat-n em{color:var(--blue);font-style:normal}
+.stat-l{font-size:11px;color:var(--t3);letter-spacing:.04em;line-height:1.5}
+
+/* MODELS */
+.models-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mtile{position:relative;background:var(--s2);border:1px solid var(--b1);border-radius:var(--r-lg);padding:32px 28px;transition:all .3s ease;text-decoration:none;display:flex;flex-direction:column;overflow:hidden;color:var(--t1)}
+.mtile::before{content:'';position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity .3s}
+.mtile.tb::before{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(91,156,246,.09),transparent)}
+.mtile.tp::before{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(167,139,250,.08),transparent)}
+.mtile.tt::before{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(52,211,153,.07),transparent)}
+.mtile:hover{transform:translateY(-4px);box-shadow:0 24px 48px rgba(0,0,0,.4)}
+.mtile:hover::before{opacity:1}
+.mtile.tb:hover{border-color:rgba(91,156,246,.25)}
+.mtile.tp:hover{border-color:rgba(167,139,250,.25)}
+.mtile.tt:hover{border-color:rgba(52,211,153,.25)}
+.tile-ey{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;position:relative}
+.tile-ey.tc-b{color:var(--blue)}.tile-ey.tc-p{color:var(--purple)}.tile-ey.tc-t{color:var(--teal)}
+.tile-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2.5s ease-in-out infinite}
+.tile-name{font-family:var(--serif);font-size:24px;font-style:italic;margin-bottom:4px;color:var(--t1);position:relative}
+.tile-alias{font-size:10.5px;color:var(--t4);letter-spacing:.05em;margin-bottom:16px;position:relative}
+.tile-desc{font-size:12px;color:var(--t2);line-height:1.7;margin-bottom:28px;flex:1;position:relative}
+.tile-specs{display:flex;gap:20px;padding-top:20px;border-top:1px solid var(--b1);position:relative}
+.spec-l{font-size:9.5px;color:var(--t4);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:3px}
+.spec-v{font-size:13px;color:var(--t1);font-weight:500}
+
+/* HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative}
+.steps::before{content:'';position:absolute;top:28px;left:calc(100%/6);right:calc(100%/6);height:1px;background:linear-gradient(90deg,transparent,var(--b2) 20%,var(--b2) 80%,transparent);pointer-events:none}
+.step{padding:0 24px;text-align:center}
+.step-num{width:56px;height:56px;border-radius:50%;background:var(--s3);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:var(--serif);font-size:20px;font-style:italic;color:var(--t1);position:relative;z-index:1;transition:all .3s}
+.step:hover .step-num{background:var(--s4);border-color:rgba(91,156,246,.3);box-shadow:0 0 24px rgba(91,156,246,.15)}
+.step-title{font-family:var(--serif);font-size:16px;font-style:italic;margin-bottom:8px;color:var(--t1)}
+.step-desc{font-size:12px;color:var(--t3);line-height:1.7}
+/* FAQ */
+.faq-list{max-width:680px}
+.faq-item{border-bottom:1px solid var(--b1)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:16px 0;cursor:pointer;color:var(--t2);font-size:13px;transition:color .2s;gap:12px}
+.faq-q:hover{color:var(--t1)}
+.faq-arrow{width:18px;height:18px;border-radius:5px;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:all .25s;color:var(--t3)}
+.faq-item.open .faq-arrow{background:var(--s4);transform:rotate(180deg);color:var(--blue)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;font-size:12.5px;color:var(--t3);line-height:1.75}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:16px}
+/* CTA BAND */
+.cta-band{position:relative;z-index:1;padding:80px 28px;text-align:center;border-top:1px solid var(--b1);overflow:hidden}
+.cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 100%,rgba(91,156,246,.07),transparent 70%);pointer-events:none}
+.cta-inner{position:relative;max-width:560px;margin:0 auto}
+.cta-h{font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);font-style:italic;line-height:1.12;letter-spacing:-.02em;margin-bottom:16px}
+.cta-h em{color:var(--blue);font-style:normal}
+.cta-p{font-size:13px;color:var(--t2);line-height:1.75;margin-bottom:32px}
+.cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--b1);padding:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.f-brand{font-family:var(--serif);font-size:15px;font-style:italic;color:var(--t3)}
+.f-brand em{color:var(--blue);font-style:normal}
+.f-nav{display:flex;gap:4px;list-style:none}
+.f-nav a{display:block;padding:4px 10px;font-size:11px;color:var(--t4);text-decoration:none;border-radius:6px;transition:color .2s}
+.f-nav a:hover{color:var(--t2)}
+.f-copy{font-size:10.5px;color:var(--t4)}
+.sec-divider{height:1px;background:var(--b1);max-width:var(--max);margin:0 auto}
+
+/* ANIMATIONS */
+@keyframes fadeup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:960px){.hero-visual{display:none}}
+@media(max-width:900px){
+  .models-strip{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .stat-cell:nth-child(2){border-right:none}
+  .stat-cell:nth-child(3){border-top:1px solid var(--b1)}
+  .stat-cell:nth-child(4){border-top:1px solid var(--b1);border-right:none}
+  .feat-grid{grid-template-columns:1fr}
+}
+@media(max-width:720px){
+  .hamburger{display:flex}
+  .nav-links{position:fixed;top:var(--nav-h);left:0;right:0;background:rgba(9,12,18,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);flex-direction:column;padding:12px;gap:2px;display:none;z-index:800}
+  .nav-links.open{display:flex}
+  .nav-links a{width:100%;padding:10px 14px;font-size:12px}
+  .sec{padding:56px 20px}
+  .hero{padding-left:20px;padding-right:20px}
+}
+@media(max-width:480px){
+  .hero-ctas{flex-direction:column}
+  .btn{width:100%;justify-content:center}
+  .cta-btns{flex-direction:column;align-items:center}
+  .stats-row{grid-template-columns:1fr}
+  .stat-cell{border-right:none!important;border-top:1px solid var(--b1)}
+  .stat-cell:first-child{border-top:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-mark">IA</div>
+    <span class="nav-wordmark">Infratry<em>AI</em></span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="czat.html">Czat</a></li>
+    <li><a href="try-free.html" class="nav-cta">Try Free</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="hero-inner">
+    <div class="pill"><span class="pill-dot"></span>Nowa generacja lokalnego AI</div>
+    <h1 class="hero-h1">
+      Rozmawiaj<br>z <em>najlepszymi</em><br><span class="dim">modelami AI.</span>
+    </h1>
+    <p class="hero-desc">Interaktywny czat z DeepSeek 600B, MiniMax i Qwen — uruchamiany lokalnie przez proxy, bez wycieku danych, z pełną historią rozmowy i streamingiem odpowiedzi.</p>
+    <div class="hero-ctas">
+      <a href="try-free.html" class="btn btn-p">✦ Wypróbuj za darmo</a>
+      <a href="czat.html"     class="btn btn-o">Otwórz czat →</a>
+    </div>
+    <div class="mchips">
+      <div class="mchip"><span class="mchip-dot md-blue"></span>Tytanium 3.7 · 671B</div>
+      <div class="mchip"><span class="mchip-dot md-purple"></span>Thinking 2.4 · MiniMax</div>
+      <div class="mchip"><span class="mchip-dot md-teal"></span>Quantum 1.9 · Qwen 72B</div>
+    </div>
+  </div>
+
+  <!-- Floating mockup -->
+  <div class="hero-visual">
+    <div class="mockup">
+      <div class="mbar">
+        <div class="mdot r"></div><div class="mdot y"></div><div class="mdot g"></div>
+        <span class="mtitle">InfratryAI · Tytanium 3.7</span>
+      </div>
+      <div class="mbody">
+        <div class="mmsg mu">
+          <div class="mav u">Ty</div>
+          <div class="mb">Napisz funkcję binarnego wyszukiwania w Pythonie</div>
+        </div>
+        <div class="mmsg ai">
+          <div class="mav ai">AI</div>
+          <div class="mb">Oczywiście! Oto wydajna implementacja:<br><br>
+            <code style="background:rgba(91,156,246,.1);padding:1px 4px;border-radius:3px;font-size:10px">def binary_search(arr, target):</code><br>
+            &nbsp;&nbsp;<code style="background:rgba(91,156,246,.1);padding:1px 4px;border-radius:3px;font-size:10px">lo, hi = 0, len(arr)-1</code><span class="mcur"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="eyebrow reveal">Możliwości</div>
+    <h2 class="sec-h2 reveal" style="transition-delay:.05s">Wszystko, czego potrzebujesz<br>do <em>pracy z AI</em></h2>
+    <p class="sec-p reveal" style="transition-delay:.1s">Zaprojektowane z myślą o deweloperach i użytkownikach ceniących prywatność, szybkość i estetykę.</p>
+    <div class="feat-grid">
+      <div class="feat-cell reveal" style="transition-delay:.1s">
+        <div class="feat-icon fi-b">🤖</div>
+        <div class="feat-h">Trzy modele AI</div>
+        <p class="feat-p">DeepSeek 671B, MiniMax i Qwen 72B w jednym interfejsie. Przełączaj modele jednym kliknięciem bez utraty kontekstu.</p>
+      </div>
+      <div class="feat-cell reveal" style="transition-delay:.15s">
+        <div class="feat-icon fi-p">⚡</div>
+        <div class="feat-h">Streaming odpowiedzi</div>
+        <p class="feat-p">Tokeny pojawiają się na bieżąco — tak jak w ChatGPT. Możesz przerwać generowanie w dowolnej chwili przyciskiem Stop.</p>
+      </div>
+      <div class="feat-cell reveal" style="transition-delay:.2s">
+        <div class="feat-icon fi-t">💬</div>
+        <div class="feat-h">Pełna historia rozmowy</div>
+        <p class="feat-p">Wieloturnowe konwersacje z zachowaniem kontekstu. Model pamięta wszystko co powiedziałeś w tej sesji.</p>
+      </div>
+      <div class="feat-cell reveal" style="transition-delay:.25s">
+        <div class="feat-icon fi-a">🔒</div>
+        <div class="feat-h">Bezpieczne proxy</div>
+        <p class="feat-p">Frontend nie przechowuje żadnych kluczy. Backend proxy chowa adresy Ollama przed światem zewnętrznym.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="sec" style="padding-top:0;padding-bottom:80px">
+  <div class="sec-inner">
+    <div class="stats-row reveal">
+      <div class="stat-cell">
+        <div class="stat-n">3</div>
+        <div class="stat-l">Modele AI<br>do wyboru</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n"><em>671</em>B</div>
+        <div class="stat-l">Parametrów<br>Tytanium 3.7</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n">128K</div>
+        <div class="stat-l">Okno kontekstu<br>modelu flagowego</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-n">∞</div>
+        <div class="stat-l">Wiadomości<br>w trybie pełnym</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELS -->
+<section class="sec" style="padding-top:0">
+  <div class="sec-inner">
+    <div class="sec-divider" style="margin-bottom:80px"></div>
+    <div class="eyebrow reveal">Modele</div>
+    <h2 class="sec-h2 reveal" style="transition-delay:.05s">Trzy silniki,<br>jeden <em>interfejs</em></h2>
+    <p class="sec-p reveal" style="transition-delay:.1s">Każdy model ma inne mocne strony. Wybierz właściwy do zadania — albo eksperymentuj.</p>
+
+    <div class="models-strip">
+      <a href="czat.html?model=tytanium-3.7" class="mtile tb reveal" style="transition-delay:.1s">
+        <div class="tile-ey tc-b"><span class="tile-dot"></span>Flagship · DeepSeek R1</div>
+        <div class="tile-name">Tytanium 3.7</div>
+        <div class="tile-alias">deepseek-r1:671b · 128k kontekst</div>
+        <p class="tile-desc">Najbardziej zaawansowany model. Niezrównany w analizie kodu, długich dokumentach i złożonym rozumowaniu wieloetapowym.</p>
+        <div class="tile-specs">
+          <div><span class="spec-l">Parametry</span><span class="spec-v">671B</span></div>
+          <div><span class="spec-l">Kontekst</span><span class="spec-v">128K</span></div>
+          <div><span class="spec-l">Tryb</span><span class="spec-v">Reasoning</span></div>
+        </div>
+      </a>
+
+      <a href="czat.html?model=thinking-2.4" class="mtile tp reveal" style="transition-delay:.15s">
+        <div class="tile-ey tc-p"><span class="tile-dot"></span>Reasoning · MiniMax</div>
+        <div class="tile-name">Thinking 2.4</div>
+        <div class="tile-alias">minimax-text-01 · 64k kontekst</div>
+        <p class="tile-desc">Specjalizuje się w rozumowaniu krok po kroku (CoT). Idealny do matematyki, logiki i zadań wymagających głębokiej refleksji.</p>
+        <div class="tile-specs">
+          <div><span class="spec-l">Tryb</span><span class="spec-v">CoT</span></div>
+          <div><span class="spec-l">Kontekst</span><span class="spec-v">64K</span></div>
+          <div><span class="spec-l">Zastos.</span><span class="spec-v">Logika</span></div>
+        </div>
+      </a>
+
+      <a href="czat.html?model=quantum-1.9" class="mtile tt reveal" style="transition-delay:.2s">
+        <div class="tile-ey tc-t"><span class="tile-dot"></span>Multilingual · Qwen</div>
+        <div class="tile-name">Quantum 1.9</div>
+        <div class="tile-alias">qwen2.5:72b · 32k kontekst</div>
+        <p class="tile-desc">Wszechstronny model wielojęzyczny. Świetny do tłumaczeń, codziennych rozmów i szybkich odpowiedzi w 100+ językach.</p>
+        <div class="tile-specs">
+          <div><span class="spec-l">Parametry</span><span class="spec-v">72B</span></div>
+          <div><span class="spec-l">Języki</span><span class="spec-v">100+</span></div>
+          <div><span class="spec-l">Zastos.</span><span class="spec-v">Ogólny</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec" style="padding-top:0">
+  <div class="sec-inner">
+    <div class="sec-divider" style="margin-bottom:80px"></div>
+    <div class="eyebrow reveal">Jak to działa</div>
+    <h2 class="sec-h2 reveal" style="transition-delay:.05s">Trzy kroki do<br><em>pierwszej rozmowy</em></h2>
+    <p class="sec-p reveal" style="transition-delay:.1s;margin-bottom:48px">Uruchomienie InfratryAI lokalnie zajmuje kilka minut.</p>
+    <div class="steps">
+      <div class="step reveal" style="transition-delay:.1s">
+        <div class="step-num">1</div>
+        <div class="step-title">Zainstaluj Ollama</div>
+        <p class="step-desc">Pobierz i uruchom Ollama na swoim komputerze. Pobierz wybrany model — np. <code style="background:var(--s3);padding:1px 5px;border-radius:3px;font-size:11px">deepseek-r1</code>.</p>
+      </div>
+      <div class="step reveal" style="transition-delay:.15s">
+        <div class="step-num">2</div>
+        <div class="step-title">Uruchom proxy</div>
+        <p class="step-desc">Wejdź do katalogu <code style="background:var(--s3);padding:1px 5px;border-radius:3px;font-size:11px">api/</code>, zainstaluj zależności i uruchom serwer Node.js. Proxy startuje na porcie 3000.</p>
+      </div>
+      <div class="step reveal" style="transition-delay:.2s">
+        <div class="step-num">3</div>
+        <div class="step-title">Otwórz interfejs</div>
+        <p class="step-desc">Otwórz <code style="background:var(--s3);padding:1px 5px;border-radius:3px;font-size:11px">czat.html</code> w przeglądarce lub przez serwer lokalny. Wybierz model i zacznij rozmawiać.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" style="padding-top:0">
+  <div class="sec-inner">
+    <div class="sec-divider" style="margin-bottom:80px"></div>
+    <div class="eyebrow reveal">FAQ</div>
+    <h2 class="sec-h2 reveal" style="transition-delay:.05s">Często zadawane<br><em>pytania</em></h2>
+    <div class="faq-list reveal" style="transition-delay:.1s">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Czy InfratryAI wysyła dane do chmury?</span><span class="faq-arrow">↓</span></div><div class="faq-a">Nie. Wszystkie rozmowy są przetwarzane lokalnie przez Ollama. Frontend komunikuje się wyłącznie z Twoim lokalnym serwerem proxy — żadne dane nie opuszczają Twojego komputera.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Jakie modele są obsługiwane?</span><span class="faq-arrow">↓</span></div><div class="faq-a">InfratryAI obsługuje trzy modele: Tytanium 3.7 (DeepSeek R1 671B), Thinking 2.4 (MiniMax Text-01) i Quantum 1.9 (Qwen 2.5 72B). Możesz dodać własne modele Ollama edytując plik <code style="background:var(--s3);padding:1px 5px;border-radius:3px;font-size:11px">api/server.js</code>.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Jakie są wymagania sprzętowe?</span><span class="faq-arrow">↓</span></div><div class="faq-a">Zależy od modelu. Dla Quantum 1.9 (72B) potrzebujesz min. 48GB RAM lub mocnej karty GPU. Dla mniejszych modeli wystarczy 16GB RAM. Frontend działa na każdej przeglądarce bez specjalnych wymagań.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Czy można używać InfratryAI na serwerze?</span><span class="faq-arrow">↓</span></div><div class="faq-a">Tak. Serwer proxy można wdrożyć na Render.com, Railway lub VPS. Ustaw zmienną <code style="background:var(--s3);padding:1px 5px;border-radius:3px;font-size:11px">OLLAMA_URL</code> na adres Twojego serwera Ollama. Frontend możesz hostować na Cloudflare Pages lub Netlify.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Czy historia rozmów jest zapisywana?</span><span class="faq-arrow">↓</span></div><div class="faq-a">Tak, rozmowy są zapisywane lokalnie w przeglądarce (localStorage). Historia jest dostępna w sidebarze czatu. Możesz eksportować rozmowy do formatu Markdown, TXT, JSON lub HTML.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band">
+  <div class="cta-inner">
+    <h2 class="cta-h">Gotowy, by zacząć<br>rozmawiać z <em>AI</em>?</h2>
+    <p class="cta-p">Uruchom InfratryAI lokalnie w kilka minut. Bez chmury, bez abonamentu, bez limitów.</p>
+    <div class="cta-btns">
+      <a href="try-free.html" class="btn btn-p">✦ Wypróbuj za darmo</a>
+      <a href="czat.html"     class="btn btn-o">Otwórz czat →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-brand">Infratry<em>AI</em></div>
+  <ul class="f-nav">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="czat.html">Czat</a></li>
+    <li><a href="try-free.html">Try Free</a></li>
+  </ul>
+  <div class="f-copy">© 2025 InfratryAI · Wszystkie prawa zastrzeżone</div>
+</footer>
+
+<script>
+// Hamburger
+const ham = document.getElementById('hamburger');
+const nav = document.getElementById('nav-links');
+if(ham && nav){
+  ham.addEventListener('click', e => { e.stopPropagation(); nav.classList.toggle('open'); });
+  document.addEventListener('click', e => { if(!ham.contains(e.target) && !nav.contains(e.target)) nav.classList.remove('open'); });
+}
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// FAQ toggle
+function toggleFaq(btn){
+  const item = btn.closest('.faq-item');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+// Animated stats counter
+function animateCounter(el, target, suffix=''){
+  const duration = 1800;
+  const start = performance.now();
+  const isNum = typeof target === 'number';
+  function tick(now){
+    const p = Math.min((now-start)/duration, 1);
+    const ease = 1 - Math.pow(1-p, 3);
+    if(isNum) el.innerHTML = Math.round(target*ease) + suffix;
+    if(p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+const statsObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const statNs = e.target.querySelectorAll('.stat-n');
+      statNs.forEach(s => {
+        const txt = s.textContent.trim();
+        if(txt === '3') animateCounter(s, 3);
+        if(txt.includes('671')) s.innerHTML = '<em>671</em>B';
+        if(txt === '128K') { s.innerHTML='0K'; setTimeout(()=>animateCounter(s,128,'K'),100); }
+        if(txt === '∞') s.textContent='∞';
+      });
+      statsObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.stats-row').forEach(el => statsObs.observe(el));
+</script>
+</body>
+</html>
